@@ -41,12 +41,13 @@ Tick items as they are finished. Nothing in the assessment should be missing fro
 - [x] Generate random name, create folder, git init
 - [x] Set neutral git identity for this repo BEFORE the first commit, verify with git config user.name and user.email
 - [ ] Decide which GitHub account owns the repo (own account or a throwaway), create the empty public repo with the same name
-- [ ] Add .gitignore (python, node, .env, .vercel, raw data) and .env.example from the start
+- [x] Add .gitignore (python, node, .env, .vercel, raw data) and .env.example from the start
+- [x] Create ASSUMPTIONS.md and record every assumption there (add to it in every phase)
 - [x] Copy Decisions.md, Tech.md, PLAN.md into repo root
 - [x] Verify tools: uv, Node 20+, Docker, git (and Claude Code if used)
-- [ ] Read the Elexon docs for FUELHH and WINDFOR: parameters, response format, whether a key is needed, rate limits; try one small request
-- [ ] Verify the real day-ahead gate closure time and set the cutoff default with a note of the source for the README
-- [ ] Confirm the decision-date interpretation (see Open items) and update Decisions.md if it changes
+- [x] Read the Elexon docs for FUELHH and WINDFOR: parameters, response format, whether a key is needed, rate limits; try one small request
+- [x] Verify the real day-ahead gate closure time and set the cutoff default with a note of the source for the README
+- [ ] Confirm the decision-date interpretation (see Open items) and update Decisions.md if it changes (tracked as A2 in ASSUMPTIONS.md)
 
 ### Phase 1: Data and cutoff logic
 - [ ] Scaffold backend with uv (fastapi, uvicorn, pandas, pyarrow, httpx, pydantic-settings, pytest, ruff)
@@ -175,7 +176,6 @@ Never cut: cutoff-logic tests, the early Vercel deploy check, the README, the vi
 
 ## Open items
 
-- Real day-ahead gate closure time (cutoff default is an assumption until verified)
 - Decision-date interpretation: "decisions made in January 2026" means decision dates 1 to 31 Jan, so delivery days 2 Jan to 1 Feb. Confirm before fetching data.
 - Vercel size limit with pandas and pyarrow (resolved in Phase 3)
 - Which GitHub account owns the repo

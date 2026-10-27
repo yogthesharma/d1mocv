@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.egg-info/
+
+# Node
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Secrets and local config
+.env
+.env.*
+!.env.example
+
+# Deployment
+.vercel/
+
+# Raw or scratch data (processed parquet in data/ is committed)
+data/raw/
+*.tmp
+
+# OS and editor
+.DS_Store
+.idea/
+.vscode/
