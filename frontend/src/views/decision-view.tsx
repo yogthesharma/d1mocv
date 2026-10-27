@@ -268,7 +268,7 @@ export function DecisionView() {
                       {formatMw(slot.forecast_mw)}
                     </TableCell>
                     <TableCell className="tabular-nums">
-                      {slot.publish_time ? formatDateTime(slot.publish_time) : '–'}
+                      {slot.publish_time ? formatDateTime(slot.publish_time) : '-'}
                     </TableCell>
                     <TableCell className="text-right tabular-nums">
                       {formatHours(slot.horizon_hours)}

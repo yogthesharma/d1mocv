@@ -7,19 +7,19 @@ const dayFormat = new Intl.DateTimeFormat('en-GB', {
 })
 
 export function formatMw(value: number | null | undefined): string {
-  return value === null || value === undefined ? '–' : mwFormat.format(value)
+  return value === null || value === undefined ? '-' : mwFormat.format(value)
 }
 
 /** Like formatMw but always shows the sign, so over- and under-forecasts are obvious. */
 export function formatSignedMw(value: number | null | undefined): string {
-  if (value === null || value === undefined) return '–'
+  if (value === null || value === undefined) return '-'
   const rounded = Math.round(value)
   if (rounded === 0) return '0'
   return `${rounded > 0 ? '+' : '−'}${mwFormat.format(Math.abs(rounded))}`
 }
 
 export function formatHours(value: number | null | undefined): string {
-  return value === null || value === undefined ? '–' : value.toFixed(1)
+  return value === null || value === undefined ? '-' : value.toFixed(1)
 }
 
 /** "2026-01-14T07:30:00Z" -> "07:30" */

@@ -41,7 +41,10 @@ export function AppLayout() {
         <SidebarInset>
           <header className="flex h-14 shrink-0 items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" aria-label="Toggle sidebar" />
-            <Separator orientation="vertical" className="mr-2 h-4" />
+            <Separator
+              orientation="vertical"
+              className="mr-2 h-4 data-[orientation=vertical]:self-center"
+            />
             <h1 className="flex-1 text-base font-semibold">
               {TITLES[pathname] ?? 'Wind forecast desk'}
             </h1>

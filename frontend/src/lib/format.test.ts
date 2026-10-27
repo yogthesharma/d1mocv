@@ -4,14 +4,14 @@ import { formatDateTime, formatDay, formatMw, formatSignedMw, formatTime } from 
 describe('format', () => {
   it('formats MW with thousands separators and a dash for missing values', () => {
     expect(formatMw(12345.6)).toBe('12,346')
-    expect(formatMw(null)).toBe('–')
+    expect(formatMw(null)).toBe('-')
   })
 
   it('always signs errors so direction is obvious', () => {
     expect(formatSignedMw(1747.9)).toBe('+1,748')
     expect(formatSignedMw(-30)).toBe('−30')
     expect(formatSignedMw(0.2)).toBe('0')
-    expect(formatSignedMw(null)).toBe('–')
+    expect(formatSignedMw(null)).toBe('-')
   })
 
   it('shows UTC times exactly as the API sends them', () => {

@@ -103,7 +103,7 @@ export function AccuracyView() {
   const hasMetrics = m.mae !== null && m.bias !== null && m.p90_abs !== null && m.p95_abs !== null
 
   const horizonRows = data.by_horizon.map((b) =>
-    chartRow(`${b.from_hours}–${b.to_hours}`, b.metrics),
+    chartRow(`${b.from_hours}-${b.to_hours}`, b.metrics),
   )
   const hourRows = data.by_hour.map((b) => chartRow(String(b.hour).padStart(2, '0'), b.metrics))
 
