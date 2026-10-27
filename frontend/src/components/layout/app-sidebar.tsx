@@ -39,7 +39,7 @@ export function AppSidebar() {
   const { pathname, search } = useLocation()
 
   return (
-    <Sidebar>
+    <Sidebar role="complementary" aria-label="Decision settings and navigation">
       <SidebarHeader>
         <div className="flex items-center gap-2 px-2 py-1.5">
           <WindIcon className="size-5" aria-hidden />

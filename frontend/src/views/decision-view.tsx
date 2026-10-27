@@ -243,7 +243,12 @@ export function DecisionView() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="max-h-[28rem] overflow-auto rounded-md border">
+          <div
+            className="max-h-[28rem] overflow-auto rounded-md border"
+            tabIndex={0}
+            role="region"
+            aria-label="Half-hourly forecast table"
+          >
             <Table>
               <TableHeader className="sticky top-0 bg-card">
                 <TableRow>

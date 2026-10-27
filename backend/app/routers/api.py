@@ -51,12 +51,17 @@ def _metrics_out(value: metrics.ErrorMetrics) -> MetricsOut:
     return MetricsOut(**value.__dict__)
 
 
-@router.get("/health", response_model=HealthResponse)
+@router.get("/health", response_model=HealthResponse, summary="Health check")
 def health() -> HealthResponse:
     return HealthResponse()
 
 
-@router.get("/meta", response_model=MetaResponse)
+@router.get(
+    "/meta",
+    response_model=MetaResponse,
+    summary="Available dates and defaults",
+    description="Decision date range, default cutoff, units and the error sign convention.",
+)
 def meta(settings: Config) -> MetaResponse:
     return MetaResponse(
         first_decision_date=settings.first_decision_date,
@@ -65,7 +70,16 @@ def meta(settings: Config) -> MetaResponse:
     )
 
 
-@router.get("/forecast-at-decision", response_model=ForecastAtDecisionResponse)
+@router.get(
+    "/forecast-at-decision",
+    response_model=ForecastAtDecisionResponse,
+    summary="Latest forecast available at the D-1 decision",
+    description=(
+        "For one delivery day, the 48 half-hours with the latest forecast published at or "
+        "before the cutoff on the decision date, its publish time, and the actual. "
+        "Slots with no forecast by the cutoff are returned with null forecast fields and counted."
+    ),
+)
 def forecast_at_decision(
     data: Data,
     settings: Config,
@@ -99,7 +113,16 @@ def forecast_at_decision(
     )
 
 
-@router.get("/accuracy", response_model=AccuracyResponse)
+@router.get(
+    "/accuracy",
+    response_model=AccuracyResponse,
+    summary="Forecast error in MW",
+    description=(
+        "MAE, RMSE, bias, P90 and P95 of absolute error for the decision-time forecasts, plus "
+        "error by forecast horizon (all published versions) and by hour of day. "
+        "Error = forecast - actual."
+    ),
+)
 def accuracy(
     data: Data,
     settings: Config,

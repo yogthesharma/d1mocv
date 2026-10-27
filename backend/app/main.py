@@ -15,6 +15,7 @@ from app.core.errors import register_error_handlers
 from app.data.loader import load_data
 from app.routers.api import router
 
+logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s %(message)s")
 log = logging.getLogger("app.request")
 
 

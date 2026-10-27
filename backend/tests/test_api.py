@@ -12,6 +12,14 @@ def client():
         yield test_client
 
 
+def test_each_request_logs_one_line(client, caplog):
+    with caplog.at_level("INFO", logger="app.request"):
+        client.get("/api/health")
+    lines = [r.getMessage() for r in caplog.records if r.name == "app.request"]
+    assert len(lines) == 1
+    assert lines[0].startswith("GET /api/health 200")
+
+
 def test_health(client):
     response = client.get("/api/health")
     assert response.status_code == 200
