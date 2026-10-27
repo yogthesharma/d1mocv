@@ -107,3 +107,12 @@ Status values: Verified (checked against a source or live API), Unverified (reas
 - Possible cause (not verified): the two Elexon datasets may not measure exactly the same thing, for example in how embedded or non-metered wind is counted. This was not investigated further and the app does not correct for it.
 - Consequence: The app reports it as it is. The bias number is shown with its meaning so the team can add it to their buffer, and the limitation is listed for the video and README.
 
+## A16. Vercel deployment layout
+
+- Status: Verified (deployed and tested)
+- Statement: One Vercel project named like the repo. The React build (`frontend/dist`) is served statically, and `api/index.py` exposes the FastAPI app as one Python function, with `backend/app` and `data` bundled in. `vercel.json` sets `"framework": null`; without that, Vercel treats the project as a FastAPI backend, skips the Python dependency install and ignores the frontend output. Python 3.12 comes from `.python-version`.
+- Size: the function is 39.2 MB with pandas and pyarrow, so no precomputing or separate backend is needed. Warm responses took about 0.4 to 1.0 seconds for `/api/accuracy`. A true cold start was not measured separately.
+- Access: the production alias `d1mocv.vercel.app` opens without a Vercel login. Other Vercel URLs for the same project contain the account name, so only the production alias should be shared.
+- `requirements.txt` at the repo root is exported from `backend/uv.lock` and must be re-exported whenever backend dependencies change: `uv export --project backend --no-dev --no-hashes --no-emit-project -o requirements.txt`.
+- No environment variables are needed yet: the defaults match, and the app and API share one domain, so CORS is not involved.
+

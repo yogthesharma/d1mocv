@@ -74,13 +74,13 @@ Tick items as they are finished. Nothing in the assessment should be missing fro
 - [ ] OpenAPI docs at /docs look right (the four paths are checked by a test; not yet viewed in a browser)
 
 ### Phase 3: Early deploy check (walking skeleton)
-- [ ] Decide the Vercel layout: api/index.py exposing the FastAPI app, vercel.json rewrites for /api/*, frontend build output
-- [ ] Deploy a skeleton: /api/health plus a blank frontend page that calls it
-- [ ] Confirm pandas and pyarrow fit the function size limit and cold start is acceptable
-- [ ] If too heavy: precompute aggregates at build time and ship small JSON/parquet, or move the backend to Render
-- [ ] Export requirements.txt from uv.lock for Vercel
-- [ ] Confirm Deployment Protection is off, project name is the anonymous one, and the URL works in incognito
-- [ ] Set environment variables on Vercel
+- [x] Decide the Vercel layout: api/index.py exposing the FastAPI app, vercel.json rewrites for /api/*, frontend build output
+- [x] Deploy a skeleton: /api/health plus a blank frontend page that calls it
+- [x] Confirm pandas and pyarrow fit the function size limit (39.2 MB) and responses are acceptable (warm 0.4 to 1.0 s; cold start not measured separately)
+- [x] If too heavy: not needed, the full backend fits
+- [x] Export requirements.txt from uv.lock for Vercel
+- [x] Confirm Deployment Protection is off, project name is the anonymous one, and the URL works in incognito
+- [x] Environment variables on Vercel: none needed yet (defaults match, same domain); revisit in Phase 6 for the AI chat key
 
 ### Phase 4: Frontend
 - [ ] Vite + React + TS (strict), Tailwind, shadcn/ui setup, API base URL from env var
