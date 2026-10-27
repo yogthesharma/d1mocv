@@ -38,12 +38,12 @@ Tick items as they are finished. Nothing in the assessment should be missing fro
 ## To do
 
 ### Phase 0: Setup and facts
-- [ ] Generate random name, create folder, git init
-- [ ] Set neutral git identity for this repo BEFORE the first commit, verify with git config user.name and user.email
+- [x] Generate random name, create folder, git init
+- [x] Set neutral git identity for this repo BEFORE the first commit, verify with git config user.name and user.email
 - [ ] Decide which GitHub account owns the repo (own account or a throwaway), create the empty public repo with the same name
 - [ ] Add .gitignore (python, node, .env, .vercel, raw data) and .env.example from the start
-- [ ] Copy Decisions.md, Tech.md, PLAN.md into repo root
-- [ ] Verify tools: uv, Node 20+, Docker, git (and Claude Code if used)
+- [x] Copy Decisions.md, Tech.md, PLAN.md into repo root
+- [x] Verify tools: uv, Node 20+, Docker, git (and Claude Code if used)
 - [ ] Read the Elexon docs for FUELHH and WINDFOR: parameters, response format, whether a key is needed, rate limits; try one small request
 - [ ] Verify the real day-ahead gate closure time and set the cutoff default with a note of the source for the README
 - [ ] Confirm the decision-date interpretation (see Open items) and update Decisions.md if it changes
