@@ -10,9 +10,6 @@ import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts'
 import { useAccuracy } from '@/api/hooks'
 import type { Metrics } from '@/api/types'
 import { AboutData } from '@/components/shared/about-data'
-import { DatePicker } from '@/components/layout/date-picker'
-import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
 import { errorTone } from '@/lib/tone'
 import { ErrorAlert } from '@/components/shared/error-alert'
 import { KpiCard, KpiCardSkeleton } from '@/components/shared/kpi-card'
@@ -76,11 +73,8 @@ function ErrorChart({ data, xLabel }: { data: ReturnType<typeof chartRow>[]; xLa
 }
 
 export function AccuracyView() {
-  const { meta, cutoffHour, rangeStart, rangeEnd, setRange } = useControls()
-  const first = meta.first_decision_date
-  const last = meta.last_decision_date
+  const { rangeStart, rangeEnd, cutoffHour } = useControls()
   const query = useAccuracy(rangeStart, rangeEnd, cutoffHour)
-  const isWholeMonth = rangeStart === first && rangeEnd === last
 
   if (query.isError) return <ErrorAlert error={query.error} onRetry={() => void query.refetch()} />
 
@@ -109,40 +103,10 @@ export function AccuracyView() {
 
   return (
     <>
-      <section aria-label="Date range" className="flex flex-wrap items-end gap-3">
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="range-start">From decision date</Label>
-          <div className="w-48">
-            <DatePicker
-              id="range-start"
-              value={rangeStart}
-              min={first}
-              max={last}
-              onChange={(day) => setRange(day, day > rangeEnd ? day : rangeEnd)}
-            />
-          </div>
-        </div>
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="range-end">To decision date</Label>
-          <div className="w-48">
-            <DatePicker
-              id="range-end"
-              value={rangeEnd}
-              min={first}
-              max={last}
-              onChange={(day) => setRange(day < rangeStart ? day : rangeStart, day)}
-            />
-          </div>
-        </div>
-        <Button variant="ghost" disabled={isWholeMonth} onClick={() => setRange(first, last)}>
-          Whole month
-        </Button>
-      </section>
-
       <p className="text-sm text-muted-foreground">
         {data.days} decision day{data.days === 1 ? '' : 's'} ({formatDay(data.start)} to{' '}
         {formatDay(data.end)}), using the forecast available at {formatHour(data.cutoff_hour)} UTC.
-        Change the cutoff in the sidebar to see how the numbers move. The sidebar decision date
+        Change the cutoff in the header to see how the numbers move. The header decision date
         applies to the Decision view only.
       </p>
 

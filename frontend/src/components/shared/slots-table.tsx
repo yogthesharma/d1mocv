@@ -6,6 +6,7 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
@@ -165,25 +166,27 @@ export function SlotsTable({ slots }: { slots: SlotRow[] }) {
             }
           />
           <DropdownMenuContent align="end" className="w-44">
-            <DropdownMenuLabel>Show columns</DropdownMenuLabel>
-            {COLUMNS.filter((column) => column.hideable).map((column) => (
-              <DropdownMenuCheckboxItem
-                key={column.id}
-                checked={!hidden.has(column.id)}
-                onCheckedChange={(checked) => {
-                  const next = new Set(hidden)
-                  if (checked === true) {
-                    next.delete(column.id)
-                  } else {
-                    next.add(column.id)
-                  }
-                  setHidden(next)
-                }}
-                closeOnClick={false}
-              >
-                {column.label}
-              </DropdownMenuCheckboxItem>
-            ))}
+            <DropdownMenuGroup>
+              <DropdownMenuLabel>Show columns</DropdownMenuLabel>
+              {COLUMNS.filter((column) => column.hideable).map((column) => (
+                <DropdownMenuCheckboxItem
+                  key={column.id}
+                  checked={!hidden.has(column.id)}
+                  onCheckedChange={(checked) => {
+                    const next = new Set(hidden)
+                    if (checked === true) {
+                      next.delete(column.id)
+                    } else {
+                      next.add(column.id)
+                    }
+                    setHidden(next)
+                  }}
+                  closeOnClick={false}
+                >
+                  {column.label}
+                </DropdownMenuCheckboxItem>
+              ))}
+            </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
         <p className="ml-auto text-xs text-muted-foreground" role="status">

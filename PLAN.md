@@ -18,6 +18,9 @@ Tick items as they are finished. Nothing in the assessment should be missing fro
 - [x] Decided repo naming: random anonymous name, same for Vercel project
 - [x] Reviewed the plan for gaps (this revision): decision-date interpretation, data validation, privacy hygiene, video hygiene, Vercel layout, README contents, acceptance checks
 - [x] Section layout pass: section titles and descriptions sit outside the cards, content inside; the half-hours table was rebuilt on shadcn Table with sorting, text and presence filters, and column visibility
+- [x] Replaced the sidebar with a sticky header: breadcrumbs with a view dropdown, date and cutoff filters, theme toggle
+- [x] Content polish: restored the section gap in the main column, moved KPI hints and section explanations under info tooltips, and themed the scrollbars (thumb only, no track)
+- [x] Stability: fixed the columns-menu crash (Base UI menu group context) and the lost-anchor-ref warnings on React 18 by making Button forwardRef; added an error boundary around the views so render errors show the standard alert instead of a blank page
 
 ## Assessment traceability
 

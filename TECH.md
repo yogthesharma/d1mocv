@@ -4,22 +4,22 @@
 
 - Vite + React 18 + TypeScript 5.9 (strict). TypeScript is held at 5.9 because the OpenAPI type generator does not support 7 yet
 - Tailwind CSS
-- shadcn/ui: button, card, select, tabs, popover, calendar, skeleton, tooltip, badge, alert, table
+- shadcn/ui: button, card, select, tabs, popover, calendar, skeleton, tooltip, badge, alert, table, breadcrumb, dropdown-menu, checkbox
 - shadcn charts (Recharts wrapper)
 - TanStack Query for data fetching
 - Dates are plain `YYYY-MM-DD` strings and UTC times are shown from the API's ISO strings; no date library
 - API types generated from the FastAPI OpenAPI schema (openapi-typescript)
 - Light and dark theme via shadcn tokens
 - ESLint + Prettier, a few Vitest tests for helpers
-- React Router with ~~three~~ routes (/decision, /accuracy, ~~/assistant~~) so each view has its own URL, driven by the sidebar
+- React Router with ~~three~~ routes (/decision, /accuracy, ~~/assistant~~) so each view has its own URL, driven by the header breadcrumb dropdown
 
-UI structure (shadcn Sidebar, inset variant, collapsible to icons, offcanvas sheet on mobile):
-- Sidebar top: app name, delivery date picker, cutoff time selector
-- Sidebar nav: Decision view, Accuracy~~, Assistant (Assistant only if the AI chat flag is on)~~
+UI structure (sticky header, no sidebar):
+- Header, a single row that reads like a sentence: the view as a dropdown (Decision/Accuracy), "in", the date inputs ("at" the cutoff selector after them; on Accuracy the inputs are the From and To range with a Whole month reset); theme toggle at the right end
 - Decision view: KPI cards, forecast vs actual chart for the chosen day, table of the 48 half-hours with publishTime, sortable, filterable (by time text and forecast presence) with column visibility
 - Accuracy view: KPI cards (MAE, RMSE, bias, P90, P95), error by horizon chart, optional error by hour chart, "what this means" takeaway panel
 - ~~Assistant view: chat UI (optional, see AI chat section)~~
 - States: skeleton loaders, empty state, error alert
+- KPI hints and section explanations show in info tooltips (hover or keyboard focus) instead of inline text
 
 ## Backend
 

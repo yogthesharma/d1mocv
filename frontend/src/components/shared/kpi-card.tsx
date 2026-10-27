@@ -1,6 +1,7 @@
 import type { LucideIcon } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { InfoTooltip } from '@/components/shared/info-tooltip'
 import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
 
@@ -21,6 +22,7 @@ export function KpiCard({ title, value, unit, hint, icon: Icon, valueClassName }
         <CardDescription className="flex items-center gap-1.5">
           {Icon ? <Icon className="size-3.5" aria-hidden /> : null}
           {title}
+          {hint ? <InfoTooltip label={`About ${title}`}>{hint}</InfoTooltip> : null}
         </CardDescription>
         <CardTitle>
           <span className={cn('text-2xl font-semibold tabular-nums', valueClassName)}>{value}</span>
@@ -29,7 +31,6 @@ export function KpiCard({ title, value, unit, hint, icon: Icon, valueClassName }
           ) : null}
         </CardTitle>
       </CardHeader>
-      {hint ? <CardContent className="text-xs text-muted-foreground">{hint}</CardContent> : null}
     </Card>
   )
 }

@@ -12,9 +12,11 @@ interface DatePickerProps {
   min: string
   max: string
   onChange: (day: string) => void
+  /** Overrides the default "Decision date (D-1)" screen-reader label. */
+  ariaLabel?: string
 }
 
-export function DatePicker({ id, value, min, max, onChange }: DatePickerProps) {
+export function DatePicker({ id, value, min, max, onChange, ariaLabel }: DatePickerProps) {
   const [open, setOpen] = useState(false)
   const selected = fromIsoDay(value)
 
@@ -24,9 +26,9 @@ export function DatePicker({ id, value, min, max, onChange }: DatePickerProps) {
         render={
           <Button
             id={id}
-            aria-label={`Decision date (D-1): ${formatDay(value)}`}
+            aria-label={ariaLabel ?? `Decision date (D-1): ${formatDay(value)}`}
             variant="outline"
-            className="w-full justify-start font-normal"
+            className="justify-start font-normal"
           >
             <CalendarIcon />
             {formatDay(value)}

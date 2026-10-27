@@ -66,7 +66,7 @@ For each target half-hour on delivery day D, use the forecast with the latest pu
    - Add a cutoff selector. Makes the demo more interesting and shows the assumption is configurable.
 
 12. UI layout
-   - shadcn Sidebar: controls (date, cutoff) at the top, nav below (Decision, Accuracy, ~~Assistant~~).
+   - ~~shadcn Sidebar: controls (date, cutoff) at the top, nav below (Decision, Accuracy, ~~Assistant~~).~~
 
 13. API scope
    - Backend limited to what the assessment asks: /api/meta, /api/forecast-at-decision, /api/accuracy, /api/health.
@@ -80,6 +80,11 @@ For each target half-hour on delivery day D, use the forecast with the latest pu
    - ~~Grounded via tool calls into the same services as the dashboard, answers only from the Elexon data.~~
    - ~~Feature flag, server-side key, rate limit. Risks accepted by the owner.~~
    - ~~Cut first if time runs short.~~
+
+16. Header layout instead of a sidebar
+   - One sticky header in a single row that reads like a sentence: the view as a dropdown (switch Decision/Accuracy), then "in", the date inputs, then "at", the cutoff time.
+   - On Decision the date is the decision date; on Accuracy it is the From and To range, with a Whole month reset when the range is narrowed. Theme toggle at the right end.
+   - The shadcn Sidebar was removed: it took permanent screen width for controls used occasionally.
 
 ## Time plan (16 hour hard cap)
 

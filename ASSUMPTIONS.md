@@ -120,10 +120,11 @@ Status values: Verified (checked against a source or live API), Unverified (reas
 
 - Status: Unverified (design choices)
 - The decision date and cutoff live in the URL (`?date=&cutoff=`), so a view can be shared or reloaded. With no date given, the app opens on 15 Jan 2026 (the first decision date plus 14 days).
-- The Accuracy view covers the whole month by default. Its own From and To pickers (URL `?from=&to=`) narrow it, and reversed dates are swapped. The sidebar cutoff applies to it; the sidebar decision date does not, and the view says so.
+- The Accuracy view covers the whole month by default. The From and To pickers in the header (URL `?from=&to=`) narrow it, and reversed dates are swapped. The header cutoff applies to it; the header decision date does not, and the view says so.
 - The 24-hour cutoff selector offers whole hours only, matching the API (A13).
 - The plain-English takeaway calls the bias "no consistent lean" when its size is under 10% of the mean absolute error, and otherwise says whether the buyer would have been short or overbought. The 10% threshold is a judgement call.
 - Data is cached forever in the browser session because it is a fixed snapshot.
+- KPI hints and section explanations appear in info tooltips (hover or keyboard focus), not as inline text, to keep the page uncluttered.
 
 ## A18. The planning range on the Decision chart
 
