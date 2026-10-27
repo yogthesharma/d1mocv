@@ -102,7 +102,7 @@ Tick items as they are finished. Nothing in the assessment should be missing fro
 - [x] Backend Dockerfile (uv sync --frozen), .dockerignore
 - [x] Frontend multi-stage build
 - [x] docker-compose with healthchecks
-- [x] Test `docker compose up` from a fresh copy of the repo in a new folder (tracked and unignored files only, built with layer cache), then `docker compose down`. A true clone with an empty cache is still worth doing once after the final commit
+- [x] Test `docker compose up` from a fresh copy of the repo in a new folder (tracked and unignored files only, built with layer cache), then `docker compose down`. Also tested from a real GitHub clone in an empty folder on host ports 18000/18080: health and meta OK, the 48 slots of 2026-01-16 at the 09:00 cutoff with none dropped, UI served, then down -v. The first attempt on default ports hit an already-allocated host port 8000, so it was rerun with the documented API_PORT/WEB_PORT overrides.
 - [x] Production deploy on Vercel (frontend static, backend function), set env vars and CORS
 - [x] Smoke test the live URL anonymously and at phone width: load, change cutoff, switch views, numbers match local and Docker (MAE 2,042 MW, bias +1,748 MW at 09:00)
 
@@ -117,7 +117,7 @@ Tick items as they are finished. Nothing in the assessment should be missing fro
 - [ ] ~~If not finished: cut it and mention it as a next step in the video~~
 
 ### Phase 7: Polish, CI, README, privacy
-- [x] GitHub Actions: lint, tests, build, generated-file drift checks and a Docker build (every step was run locally as CI runs it; the workflow itself has not yet run on GitHub). The drift check caught stale generated API types, now regenerated
+- [x] GitHub Actions: lint, tests, build, generated-file drift checks and a Docker build (every step was also run locally first; the workflow has run on GitHub and passed). The drift check caught stale generated API types, now regenerated
 - [x] Makefile or scripts: dev, test, fetch-data
 - [x] README contents:
   - [x] Overview and the two questions the app answers
