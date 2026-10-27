@@ -11,7 +11,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Health */
+        /** Health check */
         get: operations["health_api_health_get"];
         put?: never;
         post?: never;
@@ -28,7 +28,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Meta */
+        /**
+         * Available dates and defaults
+         * @description Decision date range, default cutoff, units and the error sign convention.
+         */
         get: operations["meta_api_meta_get"];
         put?: never;
         post?: never;
@@ -45,7 +48,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Forecast At Decision */
+        /**
+         * Latest forecast available at the D-1 decision
+         * @description For one delivery day, the 48 half-hours with the latest forecast published at or before the cutoff on the decision date, its publish time, and the actual. Slots with no forecast by the cutoff are returned with null forecast fields and counted.
+         */
         get: operations["forecast_at_decision_api_forecast_at_decision_get"];
         put?: never;
         post?: never;
@@ -62,7 +68,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Accuracy */
+        /**
+         * Forecast error in MW
+         * @description MAE, RMSE, bias, P90 and P95 of absolute error for the decision-time forecasts, plus error by forecast horizon (all published versions) and by hour of day. Error = forecast - actual.
+         */
         get: operations["accuracy_api_accuracy_get"];
         put?: never;
         post?: never;

@@ -117,22 +117,22 @@ Tick items as they are finished. Nothing in the assessment should be missing fro
 - [ ] ~~If not finished: cut it and mention it as a next step in the video~~
 
 ### Phase 7: Polish, CI, README, privacy
-- [ ] GitHub Actions: lint and tests ~~(cut early if short on time, after AI chat)~~
-- [ ] Makefile or scripts: dev, test, fetch-data
-- [ ] README contents:
-  - [ ] Overview and the two questions the app answers
-  - [ ] Assumptions: cutoff time and its source, UTC, decision-date interpretation, error sign
-  - [ ] Metric definitions
-  - [ ] Directory and file listing
-  - [ ] How to start: with Docker, and without Docker (uv and npm)
-  - [ ] How to run tests and how to regenerate the data
-  - [ ] Live app link
-  - [ ] AI tools used (stated explicitly)
-  - [ ] Limitations and next steps
-  - [ ] Architecture diagram and a couple of screenshots
-- [ ] Privacy scan: git log author and email, pyproject authors, package.json author, README, Dockerfiles, lockfiles, local paths, Vercel URLs
-- [ ] Secrets scan: no API keys or .env committed anywhere in history
-- [ ] Remove TODOs, debug logging and dead code
+- [x] GitHub Actions: lint, tests, build, generated-file drift checks and a Docker build (every step was run locally as CI runs it; the workflow itself has not yet run on GitHub). The drift check caught stale generated API types, now regenerated
+- [x] Makefile or scripts: dev, test, fetch-data
+- [x] README contents:
+  - [x] Overview and the two questions the app answers
+  - [x] Assumptions: cutoff time and its source, UTC, decision-date interpretation, error sign
+  - [x] Metric definitions
+  - [x] Directory and file listing
+  - [x] How to start: with Docker, and without Docker (uv and npm)
+  - [x] How to run tests and how to regenerate the data
+  - [x] Live app link
+  - [x] AI tools used (stated explicitly)
+  - [x] Limitations and next steps
+  - [x] Architecture diagram and a couple of screenshots
+- [x] Privacy scan: git log author and email (neutral), pyproject and package.json authors (none), README, Dockerfiles, lockfiles (public registries only), local paths, screenshots metadata. Clean. Not covered by a scan: the GitHub repo owner and Vercel per-deployment URLs contain the account name, so only share the production alias
+- [x] Secrets scan: no API keys, tokens or .env files in any commit (checked the full history with patterns for common key formats; only .env.example is tracked)
+- [x] Remove TODOs, debug logging and dead code (none found in backend, frontend, scripts or api)
 
 ### Phase 8: Video
 - [ ] Pick the demo dates from the data (a typical day, a calm day, a big-miss day) and note the key numbers
