@@ -16,7 +16,7 @@ Status values: Verified (checked against a source or live API), Unverified (reas
 
 ## A2. Decision dates are 1 to 31 January 2026
 
-- Status: Open (needs owner confirmation)
+- Status: Verified (confirmed by the owner)
 - Statement: "Purchase decisions made in January 2026" means decision dates 1 to 31 January, so delivery days are 2 January to 1 February 2026.
 - Reason: The decision is made on D-1, so the delivery day is one day after the decision date.
 - If wrong: only the fetch range and the date limits in the API change.
@@ -44,10 +44,9 @@ Status values: Verified (checked against a source or live API), Unverified (reas
 
 ## A6. WINDFOR publish schedule in January 2026
 
-- Status: Verified (one day sampled, 1 January 2026)
-- Observation: 8 publishes per day at 02:30, 04:30, 07:30, 09:30, 11:30, 15:30, 18:30 and 22:30 UTC. Each publish covers 73 hourly start times, about 72 hours ahead.
-- Consequence: With the 09:00 cutoff the latest usable publish on D-1 is 07:30. The 09:30 publish is after the cutoff and is never used.
-- To confirm: the same schedule holds for the whole month (checked by the data validation step).
+- Status: Verified (full fetched range, 29 Dec 2025 to 1 Feb 2026)
+- Observation: exactly 8 publishes every day, at 02:30, 04:30, 07:30, 09:30, 11:30, 15:30, 18:30 and 22:30 UTC. One extra time, 12:25, appears on one occasion. Each publish covers 73 hourly start times, about 72 hours ahead.
+- Consequence: With the 09:00 cutoff the latest usable publish on D-1 is 07:30 on every delivery day. The 09:30 publish is after the cutoff and is never used.
 
 ## A7. FUELHH stream parameters
 
@@ -67,3 +66,21 @@ Status values: Verified (checked against a source or live API), Unverified (reas
 - Status: Verified (task wording)
 - Statement: Among all forecasts for a startTime, take the one with the greatest publishTime that is less than or equal to the cutoff. A forecast published exactly at the cutoff is included.
 - Slots with no such forecast are dropped and counted, not filled.
+
+## A10. Some WINDFOR rows are published after their own target hour
+
+- Status: Verified
+- Observation: 3697 of 18080 forecast rows have publish_time later than start_time. Each publish includes a few hours that have already started.
+- Rule: no special handling. A D-1 cutoff is always before the delivery day, so these rows are never selected. They are kept in the data because the horizon analysis uses all versions.
+
+## A11. Forecast horizon at the default cutoff
+
+- Status: Verified
+- Observation: With the 09:00 cutoff, all 48 half-hours of every delivery day (2 Jan to 1 Feb) have a forecast, all from the 07:30 publish on D-1. The horizon (target time minus publish time) runs from 16.5 to 40.0 hours across the day. At a 00:00 cutoff on D-1 up to 4 slots a day have no forecast and are dropped (longest horizon 47.0 hours). At a 23:59 cutoff nothing is dropped.
+- Consequence: Dropped slots only appear for early cutoffs, and the UI shows how many.
+
+## A12. Data coverage and units
+
+- Status: Verified
+- Statement: Actuals cover 2 Jan to 1 Feb 2026, 1488 half-hours, no gaps, no duplicates, no nulls. Generation is in MW, 1695 to 17805 for actuals and 2250 to 21353 for forecasts. Forecasts cover every delivery hour with 16 to 32 versions per hour.
+- Check: backend/app/data/validation.py, run by scripts/fetch_data.py and by the tests.

@@ -47,24 +47,24 @@ Tick items as they are finished. Nothing in the assessment should be missing fro
 - [x] Verify tools: uv, Node 20+, Docker, git (and Claude Code if used)
 - [x] Read the Elexon docs for FUELHH and WINDFOR: parameters, response format, whether a key is needed, rate limits; try one small request
 - [x] Verify the real day-ahead gate closure time and set the cutoff default with a note of the source for the README
-- [ ] Confirm the decision-date interpretation (see Open items) and update Decisions.md if it changes (tracked as A2 in ASSUMPTIONS.md)
+- [x] Confirm the decision-date interpretation (A2 in ASSUMPTIONS.md, confirmed by the owner)
 
 ### Phase 1: Data and cutoff logic
-- [ ] Scaffold backend with uv (fastapi, uvicorn, pandas, pyarrow, httpx, pydantic-settings, pytest, ruff)
-- [ ] Check pyproject.toml authors field is neutral (uv init may copy it from git config)
-- [ ] Write scripts/fetch_data.py: FUELHH (WIND) actuals and ALL WINDFOR forecast versions for the needed range, chunked by date, retries with backoff, dedupe, UTC, write parquet to data/
-- [ ] Run the fetch script locally and commit the small parquet files, so reviewers never need to fetch
-- [ ] Data validation checks (script or tests): 48 slots per day, no duplicate (startTime, publishTime), no nulls, MW units, coverage of the full range, publishTime not after startTime; write down any known gaps
-- [ ] Check parquet size (matters for Vercel)
-- [ ] Explore: publishTimes per startTime, forecast lead times, behaviour at the chosen cutoff, how many slots get dropped
-- [ ] Implement the cutoff selection function in services/ (publishTime <= cutoff, inclusive)
-- [ ] pytest cases: published exactly at cutoff, just after cutoff, multiple versions, none available (dropped and counted)
-- [ ] Independent cross-check: compute one day's selection and metrics with a plain Python loop and compare to the pandas result
+- [x] Scaffold backend with uv (fastapi, uvicorn, pandas, pyarrow, httpx, pydantic-settings, pytest, ruff)
+- [x] Check pyproject.toml authors field is neutral (uv init may copy it from git config)
+- [x] Write scripts/fetch_data.py: FUELHH (WIND) actuals and ALL WINDFOR forecast versions for the needed range, chunked by date, retries with backoff, dedupe, UTC, write parquet to data/
+- [x] Run the fetch script locally and commit the small parquet files, so reviewers never need to fetch
+- [x] Data validation checks (script or tests): 48 slots per day, no duplicate (startTime, publishTime), no nulls, MW units, coverage of the full range; rows published after their own target hour are expected (A10); write down any known gaps
+- [x] Check parquet size (matters for Vercel)
+- [x] Explore: publishTimes per startTime, forecast lead times, behaviour at the chosen cutoff, how many slots get dropped
+- [x] Implement the cutoff selection function in services/ (publishTime <= cutoff, inclusive)
+- [x] pytest cases: published exactly at cutoff, just after cutoff, multiple versions, none available (dropped and counted)
+- [x] Independent cross-check of the selection with a plain Python loop over every delivery day and four cutoffs (the metrics cross-check is in Phase 2)
 
 ### Phase 2: Backend
 - [ ] Config via pydantic-settings (default cutoff hour, data path, CORS origins)
 - [ ] Data loader (parquet into DataFrames at startup, clear error if a data file is missing)
-- [ ] Metrics service: MAE, RMSE, bias, P90, P95, error by forecast horizon (hour-of-day optional)
+- [ ] Metrics service: MAE, RMSE, bias, P90, P95, error by forecast horizon (hour-of-day optional), cross-checked against a plain Python loop
 - [ ] Pydantic response models (include publishTime, horizon, delivery date, dropped slot count)
 - [ ] Endpoints: /api/health, /api/meta, /api/forecast-at-decision, /api/accuracy
 - [ ] Input validation, 422 for bad params, 404 for decision dates outside January 2026
@@ -176,7 +176,6 @@ Never cut: cutoff-logic tests, the early Vercel deploy check, the README, the vi
 
 ## Open items
 
-- Decision-date interpretation: "decisions made in January 2026" means decision dates 1 to 31 Jan, so delivery days 2 Jan to 1 Feb. Confirm before fetching data.
 - Vercel size limit with pandas and pyarrow (resolved in Phase 3)
 - Which GitHub account owns the repo
 - UI polish level
