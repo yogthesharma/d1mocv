@@ -13,7 +13,7 @@
 - ESLint + Prettier, a few Vitest tests for helpers
 - React Router with ~~three~~ routes (/decision, /accuracy, ~~/assistant~~) so each view has its own URL, driven by the sidebar
 
-UI structure (shadcn Sidebar, collapsible on mobile):
+UI structure (shadcn Sidebar, inset variant, collapsible to icons, offcanvas sheet on mobile):
 - Sidebar top: app name, delivery date picker, cutoff time selector
 - Sidebar nav: Decision view, Accuracy~~, Assistant (Assistant only if the AI chat flag is on)~~
 - Decision view: KPI cards, forecast vs actual chart for the chosen day, table of the 48 half-hours with publishTime

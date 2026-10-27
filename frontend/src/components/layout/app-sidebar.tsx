@@ -39,16 +39,23 @@ export function AppSidebar() {
   const { pathname, search } = useLocation()
 
   return (
-    <Sidebar role="complementary" aria-label="Decision settings and navigation">
+    <Sidebar
+      variant="inset"
+      collapsible="icon"
+      role="complementary"
+      aria-label="Decision settings and navigation"
+    >
       <SidebarHeader>
         <div className="flex items-center gap-2 px-2 py-1.5">
-          <WindIcon className="size-5" aria-hidden />
-          <span className="font-semibold">Wind forecast desk</span>
+          <WindIcon className="size-5 shrink-0" aria-hidden />
+          <span className="font-semibold group-data-[collapsible=icon]:hidden">
+            Wind forecast desk
+          </span>
         </div>
       </SidebarHeader>
 
       <SidebarContent>
-        <SidebarGroup>
+        <SidebarGroup className="group-data-[collapsible=icon]:hidden">
           <SidebarGroupLabel>Decision settings</SidebarGroupLabel>
           <SidebarGroupContent className="flex flex-col gap-4 px-2 pt-2">
             <div className="flex flex-col gap-1.5">
@@ -91,6 +98,7 @@ export function AppSidebar() {
                 <SidebarMenuItem key={item.to}>
                   <SidebarMenuButton
                     isActive={pathname === item.to}
+                    tooltip={item.label}
                     render={<NavLink to={{ pathname: item.to, search }} />}
                   >
                     <item.icon />
@@ -103,7 +111,7 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="text-xs text-muted-foreground">
+      <SidebarFooter className="text-xs text-muted-foreground group-data-[collapsible=icon]:hidden">
         <p className="px-2 pb-2">
           All times UTC. Error = forecast − actual, in MW. Elexon national wind data, January 2026.
         </p>
