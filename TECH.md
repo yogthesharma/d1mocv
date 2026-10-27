@@ -16,7 +16,7 @@
 UI structure (shadcn Sidebar, inset variant, collapsible to icons, offcanvas sheet on mobile):
 - Sidebar top: app name, delivery date picker, cutoff time selector
 - Sidebar nav: Decision view, Accuracy~~, Assistant (Assistant only if the AI chat flag is on)~~
-- Decision view: KPI cards, forecast vs actual chart for the chosen day, table of the 48 half-hours with publishTime
+- Decision view: KPI cards, forecast vs actual chart for the chosen day, table of the 48 half-hours with publishTime, sortable, filterable (by time text and forecast presence) with column visibility
 - Accuracy view: KPI cards (MAE, RMSE, bias, P90, P95), error by horizon chart, optional error by hour chart, "what this means" takeaway panel
 - ~~Assistant view: chat UI (optional, see AI chat section)~~
 - States: skeleton loaders, empty state, error alert

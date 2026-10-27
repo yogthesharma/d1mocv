@@ -5,8 +5,9 @@ import type { DecisionResponse } from '@/api/types'
 import { AboutData } from '@/components/shared/about-data'
 import { ErrorAlert } from '@/components/shared/error-alert'
 import { KpiCard, KpiCardSkeleton } from '@/components/shared/kpi-card'
+import { Section } from '@/components/shared/section'
+import { SlotsTable } from '@/components/shared/slots-table'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   ChartContainer,
   ChartTooltip,
@@ -14,24 +15,8 @@ import {
   type ChartConfig,
 } from '@/components/ui/chart'
 import { Skeleton } from '@/components/ui/skeleton'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
 import { buildDayChart } from '@/lib/band'
-import {
-  formatDay,
-  formatHour,
-  formatHours,
-  formatMw,
-  formatSignedMw,
-  formatTime,
-  formatDateTime,
-} from '@/lib/format'
+import { formatDay, formatHour, formatMw, formatSignedMw, formatTime } from '@/lib/format'
 import { errorTone } from '@/lib/tone'
 import { useControls } from '@/state/controls-context'
 
@@ -143,151 +128,105 @@ export function DecisionView() {
         />
       </section>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Forecast vs actual wind, {formatDay(data.delivery_date)}</CardTitle>
-          <CardDescription>
+      <Section
+        title={`Forecast vs actual wind, ${formatDay(data.delivery_date)}`}
+        description={
+          <>
             Half-hourly national wind generation in MW, times in UTC. The forecast is the version
             available at the cutoff, not a later one.
             {buffer !== null
               ? ` The shaded band is a planning range: the forecast plus or minus ${formatMw(buffer)} MW, the size of miss that 95% of January half-hours stayed within.`
               : ''}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ChartContainer config={chartConfig} className="aspect-auto h-72 w-full">
-            <ComposedChart data={chart.points} margin={{ left: 4, right: 12, top: 8 }}>
-              <CartesianGrid vertical={false} />
-              <XAxis dataKey="time" tickLine={false} axisLine={false} interval={5} />
-              <YAxis
-                tickLine={false}
-                axisLine={false}
-                width={56}
-                tickFormatter={(value: number) => formatMw(value)}
+          </>
+        }
+      >
+        <ChartContainer config={chartConfig} className="aspect-auto h-72 w-full">
+          <ComposedChart data={chart.points} margin={{ left: 4, right: 12, top: 8 }}>
+            <CartesianGrid vertical={false} />
+            <XAxis dataKey="time" tickLine={false} axisLine={false} interval={5} />
+            <YAxis
+              tickLine={false}
+              axisLine={false}
+              width={56}
+              tickFormatter={(value: number) => formatMw(value)}
+            />
+            <ChartTooltip
+              content={<ChartTooltipContent indicator="line" />}
+              formatter={(value, name) => (
+                <span>
+                  {chartConfig[name as keyof typeof chartConfig]?.label}: {formatMw(Number(value))}{' '}
+                  MW
+                </span>
+              )}
+            />
+            {buffer !== null ? (
+              <Area
+                dataKey="range"
+                type="monotone"
+                stroke="none"
+                fill="var(--color-range)"
+                fillOpacity={0.14}
+                tooltipType="none"
+                legendType="none"
+                isAnimationActive={false}
               />
-              <ChartTooltip
-                content={<ChartTooltipContent indicator="line" />}
-                formatter={(value, name) => (
-                  <span>
-                    {chartConfig[name as keyof typeof chartConfig]?.label}:{' '}
-                    {formatMw(Number(value))} MW
-                  </span>
-                )}
-              />
-              {buffer !== null ? (
-                <Area
-                  dataKey="range"
-                  type="monotone"
-                  stroke="none"
-                  fill="var(--color-range)"
-                  fillOpacity={0.14}
-                  tooltipType="none"
-                  legendType="none"
-                  isAnimationActive={false}
+            ) : null}
+            <Line
+              dataKey="forecast"
+              type="monotone"
+              stroke="var(--color-forecast)"
+              strokeWidth={2}
+              dot={false}
+              connectNulls={false}
+            />
+            <Line
+              dataKey="actual"
+              type="monotone"
+              stroke="var(--color-actual)"
+              strokeWidth={2}
+              dot={false}
+              connectNulls={false}
+            />
+          </ComposedChart>
+        </ChartContainer>
+        <ul className="mt-3 flex flex-wrap gap-4 text-xs text-muted-foreground" aria-label="Legend">
+          {Object.entries(chartConfig)
+            .filter(([key]) => key !== 'range' || buffer !== null)
+            .map(([key, item]) => (
+              <li key={key} className="flex items-center gap-1.5">
+                <span
+                  className="inline-block size-2.5 rounded-full"
+                  style={{ background: item.color, opacity: key === 'range' ? 0.4 : 1 }}
+                  aria-hidden
                 />
-              ) : null}
-              <Line
-                dataKey="forecast"
-                type="monotone"
-                stroke="var(--color-forecast)"
-                strokeWidth={2}
-                dot={false}
-                connectNulls={false}
-              />
-              <Line
-                dataKey="actual"
-                type="monotone"
-                stroke="var(--color-actual)"
-                strokeWidth={2}
-                dot={false}
-                connectNulls={false}
-              />
-            </ComposedChart>
-          </ChartContainer>
-          <ul
-            className="mt-3 flex flex-wrap gap-4 text-xs text-muted-foreground"
-            aria-label="Legend"
-          >
-            {Object.entries(chartConfig)
-              .filter(([key]) => key !== 'range' || buffer !== null)
-              .map(([key, item]) => (
-                <li key={key} className="flex items-center gap-1.5">
-                  <span
-                    className="inline-block size-2.5 rounded-full"
-                    style={{ background: item.color, opacity: key === 'range' ? 0.4 : 1 }}
-                    aria-hidden
-                  />
-                  {item.label}
-                </li>
-              ))}
-          </ul>
-          {buffer !== null && chart.compared > 0 ? (
-            <p className="mt-3 text-sm">
-              The actual stayed inside the planning range in{' '}
-              <strong>
-                {chart.inside} of {chart.compared}
-              </strong>{' '}
-              half-hours on this day.
-            </p>
-          ) : null}
-        </CardContent>
-      </Card>
+                {item.label}
+              </li>
+            ))}
+        </ul>
+        {buffer !== null && chart.compared > 0 ? (
+          <p className="mt-3 text-sm">
+            The actual stayed inside the planning range in{' '}
+            <strong>
+              {chart.inside} of {chart.compared}
+            </strong>{' '}
+            half-hours on this day.
+          </p>
+        ) : null}
+      </Section>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>All 48 half-hours</CardTitle>
-          <CardDescription>
+      <Section
+        title="All 48 half-hours"
+        description={
+          <>
             Error = forecast − actual. Positive (amber) means the forecast was too high; negative
             (blue) means too low. Horizon is the time between publication and the start of the
-            half-hour.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div
-            className="max-h-[28rem] overflow-auto rounded-md border"
-            tabIndex={0}
-            role="region"
-            aria-label="Half-hourly forecast table"
-          >
-            <Table>
-              <TableHeader className="sticky top-0 bg-card">
-                <TableRow>
-                  <TableHead>Time (UTC)</TableHead>
-                  <TableHead className="text-right">Forecast (MW)</TableHead>
-                  <TableHead>Published (UTC)</TableHead>
-                  <TableHead className="text-right">Horizon (h)</TableHead>
-                  <TableHead className="text-right">Actual (MW)</TableHead>
-                  <TableHead className="text-right">Error (MW)</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {data.slots.map((slot) => (
-                  <TableRow key={slot.start_time}>
-                    <TableCell className="tabular-nums">{formatTime(slot.start_time)}</TableCell>
-                    <TableCell className="text-right tabular-nums">
-                      {formatMw(slot.forecast_mw)}
-                    </TableCell>
-                    <TableCell className="tabular-nums">
-                      {slot.publish_time ? formatDateTime(slot.publish_time) : '-'}
-                    </TableCell>
-                    <TableCell className="text-right tabular-nums">
-                      {formatHours(slot.horizon_hours)}
-                    </TableCell>
-                    <TableCell className="text-right tabular-nums">
-                      {formatMw(slot.actual_mw)}
-                    </TableCell>
-                    <TableCell
-                      className={`text-right font-medium tabular-nums ${errorTone(slot.error_mw)}`}
-                    >
-                      {formatSignedMw(slot.error_mw)}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-        </CardContent>
-      </Card>
+            half-hour. Sort any column, filter by time or forecast presence, and choose which
+            columns to show.
+          </>
+        }
+      >
+        <SlotsTable slots={data.slots} />
+      </Section>
 
       <AboutData />
     </>

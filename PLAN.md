@@ -17,6 +17,7 @@ Tick items as they are finished. Nothing in the assessment should be missing fro
 - [x] Decided on deployment: Vercel (fallback Render for backend)
 - [x] Decided repo naming: random anonymous name, same for Vercel project
 - [x] Reviewed the plan for gaps (this revision): decision-date interpretation, data validation, privacy hygiene, video hygiene, Vercel layout, README contents, acceptance checks
+- [x] Section layout pass: section titles and descriptions sit outside the cards, content inside; the half-hours table was rebuilt on shadcn Table with sorting, text and presence filters, and column visibility
 
 ## Assessment traceability
 

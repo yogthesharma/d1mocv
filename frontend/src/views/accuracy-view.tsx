@@ -16,8 +16,8 @@ import { Label } from '@/components/ui/label'
 import { errorTone } from '@/lib/tone'
 import { ErrorAlert } from '@/components/shared/error-alert'
 import { KpiCard, KpiCardSkeleton } from '@/components/shared/kpi-card'
+import { Section } from '@/components/shared/section'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   ChartContainer,
   ChartLegend,
@@ -197,54 +197,45 @@ export function AccuracyView() {
       </section>
 
       {hasMetrics ? (
-        <Card>
-          <CardHeader>
-            <CardTitle>What this means for your buffer</CardTitle>
-            <CardDescription>Generated from the numbers above.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ul className="list-disc space-y-2 pl-5 text-sm">
-              {buildTakeaway({
-                days: data.days,
-                cutoffHour: data.cutoff_hour,
-                n: m.n,
-                mae: m.mae!,
-                bias: m.bias!,
-                p90: m.p90_abs!,
-                p95: m.p95_abs!,
-              }).map((line) => (
-                <li key={line}>{line}</li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
+        <Section
+          title="What this means for your buffer"
+          description="Generated from the numbers above."
+        >
+          <ul className="list-disc space-y-2 pl-5 text-sm">
+            {buildTakeaway({
+              days: data.days,
+              cutoffHour: data.cutoff_hour,
+              n: m.n,
+              mae: m.mae!,
+              bias: m.bias!,
+              p90: m.p90_abs!,
+              p95: m.p95_abs!,
+            }).map((line) => (
+              <li key={line}>{line}</li>
+            ))}
+          </ul>
+        </Section>
       ) : null}
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Error by forecast horizon</CardTitle>
-          <CardDescription>
+      <Section
+        title="Error by forecast horizon"
+        description={
+          <>
             Every forecast version published for these delivery days, grouped by how many hours
             before the half-hour it was made. This does not depend on the cutoff. Shorter horizons
             are expected to be more accurate.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ErrorChart data={horizonRows} xLabel="Hours between publication and delivery" />
-        </CardContent>
-      </Card>
+          </>
+        }
+      >
+        <ErrorChart data={horizonRows} xLabel="Hours between publication and delivery" />
+      </Section>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Error by hour of day</CardTitle>
-          <CardDescription>
-            Forecast available at the cutoff, grouped by the UTC hour being delivered.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ErrorChart data={hourRows} xLabel="Delivery hour (UTC)" />
-        </CardContent>
-      </Card>
+      <Section
+        title="Error by hour of day"
+        description="Forecast available at the cutoff, grouped by the UTC hour being delivered."
+      >
+        <ErrorChart data={hourRows} xLabel="Delivery hour (UTC)" />
+      </Section>
 
       <AboutData />
     </>
