@@ -96,7 +96,7 @@ Tick items as they are finished. Nothing in the assessment should be missing fro
 - [ ] Keyboard-usable controls, readable contrast (control labels and link names checked; tab order and contrast ratios not measured)
 - [x] Light and dark theme
 - [x] Neutral page title and favicon, no personal info anywhere
-- [x] ESLint, Prettier, a few Vitest tests, clean production build (the single JS bundle is about 890 kB, 275 kB gzipped; not split)
+- [x] ESLint, Prettier, a few Vitest tests, clean production build (views are lazy-loaded; first load is about 515 kB, 167 kB gzipped, and the charts load on demand)
 
 ### Phase 5: Docker and full deploy
 - [ ] Backend Dockerfile (uv sync --frozen), .dockerignore
