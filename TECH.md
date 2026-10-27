@@ -2,12 +2,12 @@
 
 ## Frontend
 
-- Vite + React 18 + TypeScript (strict)
+- Vite + React 18 + TypeScript 5.9 (strict). TypeScript is held at 5.9 because the OpenAPI type generator does not support 7 yet
 - Tailwind CSS
 - shadcn/ui: button, card, select, tabs, popover, calendar, skeleton, tooltip, badge, alert, table
 - shadcn charts (Recharts wrapper)
 - TanStack Query for data fetching
-- date-fns, always in UTC
+- Dates are plain `YYYY-MM-DD` strings and UTC times are shown from the API's ISO strings; no date library
 - API types generated from the FastAPI OpenAPI schema (openapi-typescript)
 - Light and dark theme via shadcn tokens
 - ESLint + Prettier, a few Vitest tests for helpers

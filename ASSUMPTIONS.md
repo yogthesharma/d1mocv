@@ -116,3 +116,12 @@ Status values: Verified (checked against a source or live API), Unverified (reas
 - `requirements.txt` at the repo root is exported from `backend/uv.lock` and must be re-exported whenever backend dependencies change: `uv export --project backend --no-dev --no-hashes --no-emit-project -o requirements.txt`.
 - No environment variables are needed yet: the defaults match, and the app and API share one domain, so CORS is not involved.
 
+## A17. Frontend behaviour choices
+
+- Status: Unverified (design choices)
+- The decision date and cutoff live in the URL (`?date=&cutoff=`), so a view can be shared or reloaded. With no date given, the app opens on 15 Jan 2026 (the first decision date plus 14 days).
+- The Accuracy view always covers the whole month of decision dates. The sidebar cutoff applies to it; the sidebar decision date does not, and the view says so.
+- The 24-hour cutoff selector offers whole hours only, matching the API (A13).
+- The plain-English takeaway calls the bias "no consistent lean" when its size is under 10% of the mean absolute error, and otherwise says whether the buyer would have been short or overbought. The 10% threshold is a judgement call.
+- Data is cached forever in the browser session because it is a fixed snapshot.
+

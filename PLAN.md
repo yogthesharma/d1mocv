@@ -83,19 +83,20 @@ Tick items as they are finished. Nothing in the assessment should be missing fro
 - [x] Environment variables on Vercel: none needed yet (defaults match, same domain); ~~revisit in Phase 6 for the AI chat key~~
 
 ### Phase 4: Frontend
-- [ ] Vite + React + TS (strict), Tailwind, shadcn/ui setup, API base URL from env var
-- [ ] Sidebar layout with decision date picker, cutoff selector, nav, React Router (~~3~~ routes)
-- [ ] Generate API types from the OpenAPI schema
-- [ ] TanStack Query hooks for each endpoint
-- [ ] Decision view: KPI cards, forecast vs actual chart, table of 48 half-hours with publishTime, banner when slots were dropped
-- [ ] Accuracy view: KPI cards, error by horizon chart, optional hour-of-day chart, plain-English takeaway generated from the numbers
-- [ ] Show the assumptions in the UI: cutoff time, UTC, the sign of the error next to the bias number
-- [ ] Units (MW) and UTC labelled everywhere, sensible number formatting, chart tooltips
-- [ ] Loading, empty and error states
-- [ ] Works at phone width, keyboard-usable controls, readable contrast
-- [ ] Light and dark theme
-- [ ] Neutral page title and favicon, no personal info anywhere
-- [ ] ESLint, Prettier, a few Vitest tests, clean production build
+- [x] Vite + React + TS (strict), Tailwind, shadcn/ui setup, API base URL from env var
+- [x] Sidebar layout with decision date picker, cutoff selector, nav, React Router (~~3~~ routes)
+- [x] Generate API types from the OpenAPI schema
+- [x] TanStack Query hooks for each endpoint
+- [x] Decision view: KPI cards, forecast vs actual chart, table of 48 half-hours with publishTime, banner when slots were dropped
+- [x] Accuracy view: KPI cards, error by horizon chart, optional hour-of-day chart, plain-English takeaway generated from the numbers
+- [x] Show the assumptions in the UI: cutoff time, UTC, the sign of the error next to the bias number
+- [x] Units (MW) and UTC labelled everywhere, sensible number formatting, chart tooltips
+- [x] Loading and error states (an empty state is not reachable with this data; missing metrics are handled)
+- [x] Works at phone width (checked at 375px, no horizontal page scroll)
+- [ ] Keyboard-usable controls, readable contrast (control labels and link names checked; tab order and contrast ratios not measured)
+- [x] Light and dark theme
+- [x] Neutral page title and favicon, no personal info anywhere
+- [x] ESLint, Prettier, a few Vitest tests, clean production build (the single JS bundle is about 890 kB, 275 kB gzipped; not split)
 
 ### Phase 5: Docker and full deploy
 - [ ] Backend Dockerfile (uv sync --frozen), .dockerignore
