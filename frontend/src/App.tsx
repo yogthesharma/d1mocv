@@ -1,19 +1,26 @@
-import { useEffect, useState } from 'react'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { AppLayout } from '@/components/layout/app-layout'
+import { TooltipProvider } from '@/components/ui/tooltip'
+import { AccuracyView } from '@/views/accuracy-view'
+import { DecisionView } from '@/views/decision-view'
+
+const queryClient = new QueryClient()
 
 export default function App() {
-  const [status, setStatus] = useState('checking...')
-
-  useEffect(() => {
-    fetch('/api/health')
-      .then((response) => response.json())
-      .then((body: { status: string }) => setStatus(body.status))
-      .catch(() => setStatus('unreachable'))
-  }, [])
-
   return (
-    <main style={{ fontFamily: 'system-ui', padding: 24 }}>
-      <h1>Wind forecast desk</h1>
-      <p>API status: {status}</p>
-    </main>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route element={<AppLayout />}>
+              <Route path="/decision" element={<DecisionView />} />
+              <Route path="/accuracy" element={<AccuracyView />} />
+              <Route path="*" element={<Navigate to="/decision" replace />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
   )
 }

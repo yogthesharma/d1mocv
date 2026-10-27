@@ -1,0 +1,602 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Wind forecast decision support",
+    "description": "Latest Elexon wind forecast available at the D-1 buying decision, and how wrong the forecasts are. National level, January 2026, all times UTC, generation in MW.",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/health": {
+      "get": {
+        "summary": "Health",
+        "operationId": "health_api_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/meta": {
+      "get": {
+        "summary": "Meta",
+        "operationId": "meta_api_meta_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MetaResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/forecast-at-decision": {
+      "get": {
+        "summary": "Forecast At Decision",
+        "operationId": "forecast_at_decision_api_forecast_at_decision_get",
+        "parameters": [
+          {
+            "name": "decision_date",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "description": "Day the buying decision is made (D-1)",
+              "title": "Decision Date"
+            },
+            "description": "Day the buying decision is made (D-1)"
+          },
+          {
+            "name": "cutoff_hour",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "maximum": 23,
+                  "minimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Cutoff hour (UTC) on the day before delivery",
+              "title": "Cutoff Hour"
+            },
+            "description": "Cutoff hour (UTC) on the day before delivery"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForecastAtDecisionResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/accuracy": {
+      "get": {
+        "summary": "Accuracy",
+        "operationId": "accuracy_api_accuracy_get",
+        "parameters": [
+          {
+            "name": "start",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "First decision date",
+              "title": "Start"
+            },
+            "description": "First decision date"
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Last decision date",
+              "title": "End"
+            },
+            "description": "Last decision date"
+          },
+          {
+            "name": "cutoff_hour",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "maximum": 23,
+                  "minimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Cutoff hour (UTC) on the day before delivery",
+              "title": "Cutoff Hour"
+            },
+            "description": "Cutoff hour (UTC) on the day before delivery"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccuracyResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AccuracyResponse": {
+        "properties": {
+          "start": {
+            "type": "string",
+            "format": "date",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date",
+            "title": "End"
+          },
+          "cutoff_hour": {
+            "type": "integer",
+            "title": "Cutoff Hour"
+          },
+          "days": {
+            "type": "integer",
+            "title": "Days"
+          },
+          "dropped_slots": {
+            "type": "integer",
+            "title": "Dropped Slots"
+          },
+          "overall": {
+            "$ref": "#/components/schemas/MetricsOut"
+          },
+          "by_horizon": {
+            "items": {
+              "$ref": "#/components/schemas/HorizonBucketOut"
+            },
+            "type": "array",
+            "title": "By Horizon"
+          },
+          "by_hour": {
+            "items": {
+              "$ref": "#/components/schemas/HourBucketOut"
+            },
+            "type": "array",
+            "title": "By Hour"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start",
+          "end",
+          "cutoff_hour",
+          "days",
+          "dropped_slots",
+          "overall",
+          "by_horizon",
+          "by_hour"
+        ],
+        "title": "AccuracyResponse"
+      },
+      "ForecastAtDecisionResponse": {
+        "properties": {
+          "decision_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Decision Date"
+          },
+          "delivery_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Delivery Date"
+          },
+          "cutoff": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Cutoff"
+          },
+          "cutoff_hour": {
+            "type": "integer",
+            "title": "Cutoff Hour"
+          },
+          "dropped_slots": {
+            "type": "integer",
+            "title": "Dropped Slots",
+            "description": "Slots with no forecast published by the cutoff"
+          },
+          "metrics": {
+            "$ref": "#/components/schemas/MetricsOut"
+          },
+          "slots": {
+            "items": {
+              "$ref": "#/components/schemas/SlotOut"
+            },
+            "type": "array",
+            "title": "Slots"
+          }
+        },
+        "type": "object",
+        "required": [
+          "decision_date",
+          "delivery_date",
+          "cutoff",
+          "cutoff_hour",
+          "dropped_slots",
+          "metrics",
+          "slots"
+        ],
+        "title": "ForecastAtDecisionResponse"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HealthResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "ok"
+          }
+        },
+        "type": "object",
+        "title": "HealthResponse"
+      },
+      "HorizonBucketOut": {
+        "properties": {
+          "from_hours": {
+            "type": "integer",
+            "title": "From Hours"
+          },
+          "to_hours": {
+            "type": "integer",
+            "title": "To Hours"
+          },
+          "metrics": {
+            "$ref": "#/components/schemas/MetricsOut"
+          }
+        },
+        "type": "object",
+        "required": [
+          "from_hours",
+          "to_hours",
+          "metrics"
+        ],
+        "title": "HorizonBucketOut"
+      },
+      "HourBucketOut": {
+        "properties": {
+          "hour": {
+            "type": "integer",
+            "title": "Hour",
+            "description": "UTC hour of the delivery slot"
+          },
+          "metrics": {
+            "$ref": "#/components/schemas/MetricsOut"
+          }
+        },
+        "type": "object",
+        "required": [
+          "hour",
+          "metrics"
+        ],
+        "title": "HourBucketOut"
+      },
+      "MetaResponse": {
+        "properties": {
+          "first_decision_date": {
+            "type": "string",
+            "format": "date",
+            "title": "First Decision Date"
+          },
+          "last_decision_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Last Decision Date"
+          },
+          "default_cutoff_hour": {
+            "type": "integer",
+            "title": "Default Cutoff Hour"
+          },
+          "timezone": {
+            "type": "string",
+            "title": "Timezone",
+            "default": "UTC"
+          },
+          "unit": {
+            "type": "string",
+            "title": "Unit",
+            "default": "MW"
+          },
+          "error_definition": {
+            "type": "string",
+            "title": "Error Definition",
+            "default": "error = forecast - actual. Positive: forecast too high, the buyer is short. Negative: forecast too low, the buyer overbought."
+          }
+        },
+        "type": "object",
+        "required": [
+          "first_decision_date",
+          "last_decision_date",
+          "default_cutoff_hour"
+        ],
+        "title": "MetaResponse"
+      },
+      "MetricsOut": {
+        "properties": {
+          "n": {
+            "type": "integer",
+            "title": "N",
+            "description": "Half-hour slots included"
+          },
+          "mae": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mae",
+            "description": "Mean absolute error, MW"
+          },
+          "rmse": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rmse",
+            "description": "Root mean squared error, MW"
+          },
+          "bias": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bias",
+            "description": "Mean of forecast - actual, MW"
+          },
+          "p90_abs": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "P90 Abs",
+            "description": "90th percentile of absolute error, MW"
+          },
+          "p95_abs": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "P95 Abs",
+            "description": "95th percentile of absolute error, MW"
+          }
+        },
+        "type": "object",
+        "required": [
+          "n",
+          "mae",
+          "rmse",
+          "bias",
+          "p90_abs",
+          "p95_abs"
+        ],
+        "title": "MetricsOut"
+      },
+      "SlotOut": {
+        "properties": {
+          "start_time": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start Time"
+          },
+          "forecast_mw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Forecast Mw"
+          },
+          "publish_time": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Publish Time"
+          },
+          "horizon_hours": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Horizon Hours"
+          },
+          "actual_mw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Actual Mw"
+          },
+          "error_mw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Mw"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start_time",
+          "forecast_mw",
+          "publish_time",
+          "horizon_hours",
+          "actual_mw",
+          "error_mw"
+        ],
+        "title": "SlotOut"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}
