@@ -121,7 +121,7 @@ The most important tests are the cutoff-logic tests in `backend/tests/test_selec
 | `GET /api/forecast-at-decision?decision_date=&cutoff_hour=` | Requirement 1: the 48 half-hours with the selected forecast, its publish time and the actual. |
 | `GET /api/accuracy?start=&end=&cutoff_hour=` | Requirement 2: MAE, RMSE, bias, P90, P95, error by horizon and by hour. |
 
-Bad parameters return 422 and decision dates outside January 2026 return 404, both with the same JSON error shape.
+Bad parameters return 422 and decision dates outside January 2026 return 404, both with the same JSON error shape. The deployed function also serves the schema at `/openapi.json` and Swagger UI at `/docs`.
 
 ## Files and directories
 

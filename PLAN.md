@@ -75,7 +75,7 @@ Tick items as they are finished. Nothing in the assessment should be missing fro
 - [x] CORS restricted to the app's own domains, request logging
 - [x] API tests with TestClient and metric math checks
 - [x] ruff clean, type hints in place
-- [x] OpenAPI docs: schema reviewed (summaries, descriptions, parameter text added). The Swagger UI page itself could not be rendered in the in-app browser because its script loads from a CDN that pane did not load, so it was not seen rendered
+- [x] OpenAPI docs: schema reviewed (summaries, descriptions, parameter text added). The Swagger UI page itself could not be rendered in the in-app browser because its script loads from a CDN that pane did not load, so it was not seen rendered here; `/docs` and `/openapi.json` are now rewritten to the function so they work on the deployment as well as locally
 
 ### Phase 3: Early deploy check (walking skeleton)
 - [x] Decide the Vercel layout: api/index.py exposing the FastAPI app, vercel.json rewrites for /api/*, frontend build output
