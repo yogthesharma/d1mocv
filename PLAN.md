@@ -10,10 +10,10 @@ Tick items as they are finished. Nothing in the assessment should be missing fro
 - [x] Wrote Decisions.md (cutoff, scope, error sign, metrics, data handling, deployment, repo naming)
 - [x] Wrote Tech.md (frontend, backend, data, tests, project-wide tooling, repo layout)
 - [x] Chose stack: Vite + React + TS, Tailwind, shadcn/ui, shadcn charts, TanStack Query; FastAPI, pandas, pyarrow, uv
-- [x] Chose UI layout: shadcn Sidebar (controls on top, nav for Decision, Accuracy, Assistant)
+- [x] Chose UI layout: shadcn Sidebar (controls on top, nav for Decision, Accuracy, ~~Assistant~~)
 - [x] Trimmed API to what the assessment asks: health, meta, forecast-at-decision, accuracy
 - [x] Decided on no authentication (public data, evaluators need open access)
-- [x] Decided on AI chat as optional, gated, built only after core is deployed
+- [x] ~~Decided on AI chat as optional, gated, built only after core is deployed~~
 - [x] Decided on deployment: Vercel (fallback Render for backend)
 - [x] Decided repo naming: random anonymous name, same for Vercel project
 - [x] Reviewed the plan for gaps (this revision): decision-date interpretation, data validation, privacy hygiene, video hygiene, Vercel layout, README contents, acceptance checks
@@ -80,11 +80,11 @@ Tick items as they are finished. Nothing in the assessment should be missing fro
 - [x] If too heavy: not needed, the full backend fits
 - [x] Export requirements.txt from uv.lock for Vercel
 - [x] Confirm Deployment Protection is off, project name is the anonymous one, and the URL works in incognito
-- [x] Environment variables on Vercel: none needed yet (defaults match, same domain); revisit in Phase 6 for the AI chat key
+- [x] Environment variables on Vercel: none needed yet (defaults match, same domain); ~~revisit in Phase 6 for the AI chat key~~
 
 ### Phase 4: Frontend
 - [ ] Vite + React + TS (strict), Tailwind, shadcn/ui setup, API base URL from env var
-- [ ] Sidebar layout with decision date picker, cutoff selector, nav, React Router (3 routes)
+- [ ] Sidebar layout with decision date picker, cutoff selector, nav, React Router (~~3~~ routes)
 - [ ] Generate API types from the OpenAPI schema
 - [ ] TanStack Query hooks for each endpoint
 - [ ] Decision view: KPI cards, forecast vs actual chart, table of 48 half-hours with publishTime, banner when slots were dropped
@@ -105,18 +105,18 @@ Tick items as they are finished. Nothing in the assessment should be missing fro
 - [ ] Production deploy on Vercel (frontend static, backend function), set env vars and CORS
 - [ ] Smoke test the live URL in incognito and at phone width: load, change date, change cutoff, switch views, check numbers match local
 
-### Phase 6: Optional AI chat (only after core is built, tested and deployed)
-- [ ] Define tools: get_meta, get_forecast_at_decision, get_accuracy, calling the same services as the dashboard
-- [ ] POST /api/chat with Claude API tool use
-- [ ] System prompt restricts answers to this Elexon data and January 2026, refuses anything else
-- [ ] Feature flag, server-side key only (never in the frontend bundle), per-IP rate limit, token cap
-- [ ] Assistant view in the frontend, hidden when the flag is off, small note that answers come from the computed data
-- [ ] Handle Vercel timeouts (fallback to non-streaming)
-- [ ] Test with a short question set: numbers match the dashboard, out-of-scope questions are refused, missing key is handled
-- [ ] If not finished: cut it and mention it as a next step in the video
+### Phase 6: Optional AI chat (only after core is built, tested and deployed) — dropped: a streaming chat does not make sense on a serverless deploy
+~~- [ ] Define tools: get_meta, get_forecast_at_decision, get_accuracy, calling the same services as the dashboard~~
+~~- [ ] POST /api/chat with Claude API tool use~~
+~~- [ ] System prompt restricts answers to this Elexon data and January 2026, refuses anything else~~
+~~- [ ] Feature flag, server-side key only (never in the frontend bundle), per-IP rate limit, token cap~~
+~~- [ ] Assistant view in the frontend, hidden when the flag is off, small note that answers come from the computed data~~
+~~- [ ] Handle Vercel timeouts (fallback to non-streaming)~~
+~~- [ ] Test with a short question set: numbers match the dashboard, out-of-scope questions are refused, missing key is handled~~
+- [ ] ~~If not finished: cut it and mention it as a next step in the video~~
 
 ### Phase 7: Polish, CI, README, privacy
-- [ ] GitHub Actions: lint and tests (cut early if short on time, after AI chat)
+- [ ] GitHub Actions: lint and tests ~~(cut early if short on time, after AI chat)~~
 - [ ] Makefile or scripts: dev, test, fetch-data
 - [ ] README contents:
   - [ ] Overview and the two questions the app answers
@@ -168,7 +168,7 @@ Tick items as they are finished. Nothing in the assessment should be missing fro
 
 ## Cut order if scope runs short
 
-1. AI chat
+1. ~~AI chat~~
 2. CI
 3. Dark mode
 4. Hour-of-day chart

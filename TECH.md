@@ -11,14 +11,14 @@
 - API types generated from the FastAPI OpenAPI schema (openapi-typescript)
 - Light and dark theme via shadcn tokens
 - ESLint + Prettier, a few Vitest tests for helpers
-- React Router with three routes (/decision, /accuracy, /assistant) so each view has its own URL, driven by the sidebar
+- React Router with ~~three~~ routes (/decision, /accuracy, ~~/assistant~~) so each view has its own URL, driven by the sidebar
 
 UI structure (shadcn Sidebar, collapsible on mobile):
 - Sidebar top: app name, delivery date picker, cutoff time selector
-- Sidebar nav: Decision view, Accuracy, Assistant (Assistant only if the AI chat flag is on)
+- Sidebar nav: Decision view, Accuracy~~, Assistant (Assistant only if the AI chat flag is on)~~
 - Decision view: KPI cards, forecast vs actual chart for the chosen day, table of the 48 half-hours with publishTime
 - Accuracy view: KPI cards (MAE, RMSE, bias, P90, P95), error by horizon chart, optional error by hour chart, "what this means" takeaway panel
-- Assistant view: chat UI (optional, see AI chat section)
+- ~~Assistant view: chat UI (optional, see AI chat section)~~
 - States: skeleton loaders, empty state, error alert
 
 ## Backend
@@ -49,7 +49,7 @@ Endpoints (kept to exactly what the assessment needs):
   Requirement 1: the 48 half-hours with selected forecast, its publishTime, and the actual.
 - GET /api/accuracy?start=&end=&cutoff_hour=   (start and end are decision dates)
   Requirement 2: MAE, RMSE, bias, P90/P95 of absolute error, error by forecast horizon. Error by hour of day included only if time allows.
-- POST /api/chat (optional, behind a feature flag, see AI chat section)
+- ~~POST /api/chat (optional, behind a feature flag, see AI chat section)~~
 
 Error handling: consistent JSON errors, 422 for bad dates, 404 for dates outside January 2026.
 
@@ -59,18 +59,18 @@ Error handling: consistent JSON errors, 422 for bad dates, 404 for dates outside
 - Cleans, dedupes, converts to UTC, writes parquet into data/.
 - Deployed app only reads the parquet files.
 
-## AI chat (optional, gated)
+## ~~AI chat (optional, gated)~~ — dropped: a streaming chat does not make sense on a serverless deploy
 
-Only built after the core is finished, tested and deployed (target: start around hour 11). Hard cap about 2 hours.
+~~Only built after the core is finished, tested and deployed (target: start around hour 11). Hard cap about 2 hours.~~
 
-- POST /api/chat using the Claude API with tool use, streaming the reply
-- Tools call the same service functions as the dashboard (forecast at decision, accuracy), so every number comes from computed data, never from the model
-- System prompt restricts answers to this Elexon wind data and January 2026; refuse anything else
-- Example questions: "How much buffer should I plan for Jan 15?", "Was the forecast biased on windy days?"
-- API key server-side only, never in the frontend
-- Feature flag (env var) and per-IP rate limit; if the key is missing the Assistant nav item is hidden
-- Watch Vercel function timeouts with streaming; fall back to non-streaming if needed
-- If not finished in time, cut it and mention it in the video as a next step
+- ~~POST /api/chat using the Claude API with tool use, streaming the reply~~
+- ~~Tools call the same service functions as the dashboard (forecast at decision, accuracy), so every number comes from computed data, never from the model~~
+- ~~System prompt restricts answers to this Elexon wind data and January 2026; refuse anything else~~
+- ~~Example questions: "How much buffer should I plan for Jan 15?", "Was the forecast biased on windy days?"~~
+- ~~API key server-side only, never in the frontend~~
+- ~~Feature flag (env var) and per-IP rate limit; if the key is missing the Assistant nav item is hidden~~
+- ~~Watch Vercel function timeouts with streaming; fall back to non-streaming if needed~~
+- ~~If not finished in time, cut it and mention it in the video as a next step~~
 
 ## Tests (must have)
 

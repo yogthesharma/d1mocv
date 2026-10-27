@@ -66,20 +66,20 @@ For each target half-hour on delivery day D, use the forecast with the latest pu
    - Add a cutoff selector. Makes the demo more interesting and shows the assumption is configurable.
 
 12. UI layout
-   - shadcn Sidebar: controls (date, cutoff) at the top, nav below (Decision, Accuracy, Assistant).
+   - shadcn Sidebar: controls (date, cutoff) at the top, nav below (Decision, Accuracy, ~~Assistant~~).
 
 13. API scope
    - Backend limited to what the assessment asks: /api/meta, /api/forecast-at-decision, /api/accuracy, /api/health.
-   - No extra endpoints beyond the optional chat.
+   - No extra endpoints beyond ~~the optional chat~~.
 
 14. Package management
    - uv for the backend (pyproject.toml + uv.lock). Export requirements.txt from the lockfile for Vercel.
 
-15. AI chat (optional)
-   - Showcase of AI skills, built only after core, tests and deploy are done (start around hour 11, cap 2 hours).
-   - Grounded via tool calls into the same services as the dashboard, answers only from the Elexon data.
-   - Feature flag, server-side key, rate limit. Risks accepted by the owner.
-   - Cut first if time runs short.
+15. ~~AI chat (optional)~~
+   - ~~Showcase of AI skills, built only after core, tests and deploy are done (start around hour 11, cap 2 hours).~~
+   - ~~Grounded via tool calls into the same services as the dashboard, answers only from the Elexon data.~~
+   - ~~Feature flag, server-side key, rate limit. Risks accepted by the owner.~~
+   - ~~Cut first if time runs short.~~
 
 ## Time plan (16 hour hard cap)
 
@@ -89,9 +89,9 @@ For each target half-hour on delivery day D, use the forecast with the latest pu
 - 2h Docker and deploy
 - 2h video
 - 2h buffer and polish
-- AI chat (optional) comes out of the buffer and frontend time, only if core is deployed by around hour 11
+- ~~AI chat (optional) comes out of the buffer and frontend time, only if core is deployed by around hour 11~~
 
-Cut order if time runs short: AI chat, then CI, then dark mode, then hour-of-day chart. Never cut the cutoff-logic tests.
+Cut order if time runs short: ~~AI chat~~, then CI, then dark mode, then hour-of-day chart. Never cut the cutoff-logic tests.
 
 ## Open items
 
