@@ -26,6 +26,14 @@ export function ControlsProvider({ meta, children }: { meta: Meta; children: Rea
       ? rawCutoff
       : meta.default_cutoff_hour
 
+  const first = meta.first_decision_date
+  const last = meta.last_decision_date
+  const rawStart = params.get('from')
+  const rawEnd = params.get('to')
+  const start = isIsoDay(rawStart) ? clampDay(rawStart, first, last) : first
+  const end = isIsoDay(rawEnd) ? clampDay(rawEnd, first, last) : last
+  const [rangeStart, rangeEnd] = start <= end ? [start, end] : [end, start]
+
   const update = useCallback(
     (key: string, value: string) =>
       setParams(
@@ -46,8 +54,20 @@ export function ControlsProvider({ meta, children }: { meta: Meta; children: Rea
       cutoffHour,
       setDecisionDate: (day) => update('date', day),
       setCutoffHour: (hour) => update('cutoff', String(hour)),
+      rangeStart,
+      rangeEnd,
+      setRange: (from, to) =>
+        setParams(
+          (previous) => {
+            const next = new URLSearchParams(previous)
+            next.set('from', from)
+            next.set('to', to)
+            return next
+          },
+          { replace: true },
+        ),
     }),
-    [meta, decisionDate, cutoffHour, update],
+    [meta, decisionDate, cutoffHour, update, rangeStart, rangeEnd, setParams],
   )
 
   return <ControlsContext.Provider value={value}>{children}</ControlsContext.Provider>

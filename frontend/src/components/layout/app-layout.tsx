@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import { useMeta } from '@/api/hooks'
 import { ErrorAlert } from '@/components/shared/error-alert'
@@ -46,8 +47,10 @@ export function AppLayout() {
             </h1>
             <ThemeToggle />
           </header>
-          <main className="flex flex-col gap-6 p-4 md:p-6">
-            <Outlet />
+          <main className="mx-auto flex w-full max-w-6xl flex-col gap-6 p-4 md:p-6">
+            <Suspense fallback={<Skeleton className="h-96 w-full" aria-busy="true" />}>
+              <Outlet />
+            </Suspense>
           </main>
         </SidebarInset>
       </SidebarProvider>

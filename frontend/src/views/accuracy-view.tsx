@@ -1,7 +1,19 @@
-import { AlertTriangleIcon } from 'lucide-react'
+import {
+  AlertTriangleIcon,
+  RulerIcon,
+  ScaleIcon,
+  SigmaIcon,
+  TargetIcon,
+  TrendingUpIcon,
+} from 'lucide-react'
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts'
 import { useAccuracy } from '@/api/hooks'
 import type { Metrics } from '@/api/types'
+import { AboutData } from '@/components/shared/about-data'
+import { DatePicker } from '@/components/layout/date-picker'
+import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
+import { errorTone } from '@/lib/tone'
 import { ErrorAlert } from '@/components/shared/error-alert'
 import { KpiCard, KpiCardSkeleton } from '@/components/shared/kpi-card'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
@@ -64,10 +76,11 @@ function ErrorChart({ data, xLabel }: { data: ReturnType<typeof chartRow>[]; xLa
 }
 
 export function AccuracyView() {
-  const { meta, cutoffHour } = useControls()
-  const start = meta.first_decision_date
-  const end = meta.last_decision_date
-  const query = useAccuracy(start, end, cutoffHour)
+  const { meta, cutoffHour, rangeStart, rangeEnd, setRange } = useControls()
+  const first = meta.first_decision_date
+  const last = meta.last_decision_date
+  const query = useAccuracy(rangeStart, rangeEnd, cutoffHour)
+  const isWholeMonth = rangeStart === first && rangeEnd === last
 
   if (query.isError) return <ErrorAlert error={query.error} onRetry={() => void query.refetch()} />
 
@@ -96,11 +109,41 @@ export function AccuracyView() {
 
   return (
     <>
+      <section aria-label="Date range" className="flex flex-wrap items-end gap-3">
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="range-start">From decision date</Label>
+          <div className="w-48">
+            <DatePicker
+              id="range-start"
+              value={rangeStart}
+              min={first}
+              max={last}
+              onChange={(day) => setRange(day, day > rangeEnd ? day : rangeEnd)}
+            />
+          </div>
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="range-end">To decision date</Label>
+          <div className="w-48">
+            <DatePicker
+              id="range-end"
+              value={rangeEnd}
+              min={first}
+              max={last}
+              onChange={(day) => setRange(day < rangeStart ? day : rangeStart, day)}
+            />
+          </div>
+        </div>
+        <Button variant="ghost" disabled={isWholeMonth} onClick={() => setRange(first, last)}>
+          Whole month
+        </Button>
+      </section>
+
       <p className="text-sm text-muted-foreground">
-        Decisions from <strong>{formatDay(data.start)}</strong> to{' '}
-        <strong>{formatDay(data.end)}</strong> ({data.days} days), using the forecast available at{' '}
-        {formatHour(data.cutoff_hour)} UTC. Change the cutoff in the sidebar to see how the numbers
-        move. The decision date applies to the Decision view only.
+        {data.days} decision day{data.days === 1 ? '' : 's'} ({formatDay(data.start)} to{' '}
+        {formatDay(data.end)}), using the forecast available at {formatHour(data.cutoff_hour)} UTC.
+        Change the cutoff in the sidebar to see how the numbers move. The sidebar decision date
+        applies to the Decision view only.
       </p>
 
       {data.dropped_slots > 0 ? (
@@ -116,30 +159,36 @@ export function AccuracyView() {
 
       <section aria-label="Error summary" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
         <KpiCard
+          icon={RulerIcon}
           title="Mean absolute error"
           value={formatMw(m.mae)}
           unit="MW"
           hint="Typical size of a miss."
         />
         <KpiCard
+          icon={SigmaIcon}
           title="Root mean square error"
           value={formatMw(m.rmse)}
           unit="MW"
           hint="Punishes big misses more."
         />
         <KpiCard
+          icon={ScaleIcon}
           title="Bias (forecast − actual)"
           value={formatSignedMw(m.bias)}
           unit="MW"
+          valueClassName={errorTone(m.bias)}
           hint="Positive: forecast too high, buyer short."
         />
         <KpiCard
+          icon={TargetIcon}
           title="P90 absolute error"
           value={formatMw(m.p90_abs)}
           unit="MW"
           hint="9 in 10 misses are this small or smaller."
         />
         <KpiCard
+          icon={TrendingUpIcon}
           title="P95 absolute error"
           value={formatMw(m.p95_abs)}
           unit="MW"
@@ -196,6 +245,8 @@ export function AccuracyView() {
           <ErrorChart data={hourRows} xLabel="Delivery hour (UTC)" />
         </CardContent>
       </Card>
+
+      <AboutData />
     </>
   )
 }
