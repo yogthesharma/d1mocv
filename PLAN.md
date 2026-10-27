@@ -62,15 +62,16 @@ Tick items as they are finished. Nothing in the assessment should be missing fro
 - [x] Independent cross-check of the selection with a plain Python loop over every delivery day and four cutoffs (the metrics cross-check is in Phase 2)
 
 ### Phase 2: Backend
-- [ ] Config via pydantic-settings (default cutoff hour, data path, CORS origins)
-- [ ] Data loader (parquet into DataFrames at startup, clear error if a data file is missing)
-- [ ] Metrics service: MAE, RMSE, bias, P90, P95, error by forecast horizon (hour-of-day optional), cross-checked against a plain Python loop
-- [ ] Pydantic response models (include publishTime, horizon, delivery date, dropped slot count)
-- [ ] Endpoints: /api/health, /api/meta, /api/forecast-at-decision, /api/accuracy
-- [ ] Input validation, 422 for bad params, 404 for decision dates outside January 2026
-- [ ] CORS restricted to the app's own domains, request logging
-- [ ] API tests with TestClient and metric math checks
-- [ ] ruff clean, type hints in place, OpenAPI docs at /docs look right
+- [x] Config via pydantic-settings (default cutoff hour, data path, CORS origins)
+- [x] Data loader (parquet into DataFrames at startup, clear error if a data file is missing)
+- [x] Metrics service: MAE, RMSE, bias, P90, P95, error by forecast horizon (hour-of-day optional), cross-checked against a plain Python loop
+- [x] Pydantic response models (include publishTime, horizon, delivery date, dropped slot count)
+- [x] Endpoints: /api/health, /api/meta, /api/forecast-at-decision, /api/accuracy
+- [x] Input validation, 422 for bad params, 404 for decision dates outside January 2026
+- [x] CORS restricted to the app's own domains, request logging
+- [x] API tests with TestClient and metric math checks
+- [x] ruff clean, type hints in place
+- [ ] OpenAPI docs at /docs look right (the four paths are checked by a test; not yet viewed in a browser)
 
 ### Phase 3: Early deploy check (walking skeleton)
 - [ ] Decide the Vercel layout: api/index.py exposing the FastAPI app, vercel.json rewrites for /api/*, frontend build output

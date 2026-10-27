@@ -84,3 +84,26 @@ Status values: Verified (checked against a source or live API), Unverified (reas
 - Status: Verified
 - Statement: Actuals cover 2 Jan to 1 Feb 2026, 1488 half-hours, no gaps, no duplicates, no nulls. Generation is in MW, 1695 to 17805 for actuals and 2250 to 21353 for forecasts. Forecasts cover every delivery hour with 16 to 32 versions per hour.
 - Check: backend/app/data/validation.py, run by scripts/fetch_data.py and by the tests.
+- Rows published after their own target hour are allowed by the validator (A10); they are reported by `count_after_target`, not treated as errors.
+
+## A13. API parameters are decision dates and whole-hour cutoffs
+
+- Status: Unverified (design choice)
+- Statement: `/api/forecast-at-decision` takes `decision_date` (the day the buyer decides, D-1) and the response also gives `delivery_date`. `/api/accuracy` takes `start` and `end` as decision dates. `cutoff_hour` is a whole UTC hour from 0 to 23 on the decision date, default 9. Decision dates outside 1 to 31 January 2026 return 404.
+- Reason: The assessment talks about purchase decisions made in January, so the user picks the decision day. Whole hours keep the selector simple; the logic itself accepts any minute.
+- If wrong: rename the parameter or add minutes in the router only.
+
+## A14. How the accuracy numbers are defined
+
+- Status: Unverified (design choice)
+- Statement: Overall and by-hour metrics use the decision-time forecast for each half-hour, so they change with the cutoff. Percentiles (P90, P95) are of the absolute error with linear interpolation. The by-horizon view uses every published forecast version for the delivery days in range, in 6 hour buckets of target time minus publish time, and does not depend on the cutoff. Versions published after their target slot started are excluded from it (A10).
+- Reason: The by-horizon view shows how much better forecasts get closer to delivery, which is what tells the team whether waiting for a later forecast would help.
+- If wrong: change the bucket size or restrict the view to decision-time forecasts in services/metrics.py.
+
+## A15. Observation: forecasts run high at every horizon
+
+- Status: Verified (observation, cause not established)
+- Observation: Over all 31 decision days at the 09:00 cutoff, MAE is about 2,040 MW, RMSE about 2,510 MW, P95 absolute error about 5,310 MW, and bias about +1,750 MW (forecast above actual). The bias is positive in every horizon bucket, including forecasts made 0 to 6 hours ahead (about +1,430 MW), so it is not only a long-range weather error.
+- Possible cause (not verified): the two Elexon datasets may not measure exactly the same thing, for example in how embedded or non-metered wind is counted. This was not investigated further and the app does not correct for it.
+- Consequence: The app reports it as it is. The bias number is shown with its meaning so the team can add it to their buffer, and the limitation is listed for the video and README.
+

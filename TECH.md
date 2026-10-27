@@ -45,9 +45,9 @@ Layout:
 Endpoints (kept to exactly what the assessment needs):
 - GET /api/health
 - GET /api/meta (available date range, default cutoff)
-- GET /api/forecast-at-decision?date=&cutoff_hour=
+- GET /api/forecast-at-decision?decision_date=&cutoff_hour=
   Requirement 1: the 48 half-hours with selected forecast, its publishTime, and the actual.
-- GET /api/accuracy?start=&end=&cutoff_hour=
+- GET /api/accuracy?start=&end=&cutoff_hour=   (start and end are decision dates)
   Requirement 2: MAE, RMSE, bias, P90/P95 of absolute error, error by forecast horizon. Error by hour of day included only if time allows.
 - POST /api/chat (optional, behind a feature flag, see AI chat section)
 
