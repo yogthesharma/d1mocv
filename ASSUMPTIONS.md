@@ -132,3 +132,12 @@ Status values: Verified (checked against a source or live API), Unverified (reas
 - Caveat: the band is measured on the same January data it is drawn over (in-sample), so it would be too optimistic for a future month. The About the data panel says so.
 - If wrong: drop the band, or build it from a bias-adjusted range.
 
+## A19. Docker setup
+
+- Status: Verified (built and run, also from a fresh copy of the repo)
+- Statement: `docker compose up --build` starts two containers. The backend (Python 3.12, installed from `backend/uv.lock`, runs as a non-root user, data snapshot baked in) listens on port 8000. The frontend is nginx serving the built site and proxying `/api` to the backend, on host port 8080. Both have health checks and the frontend waits for a healthy backend.
+- Ports: host ports can be changed with `WEB_PORT` and `API_PORT` (for example when 8080 is taken). They are documented in `.env.example`.
+- Size: the backend image is about 1.1 GB, mostly pandas, numpy and pyarrow. It was not slimmed.
+- Results are identical across the local run, Docker and the live Vercel site (MAE 2,042 MW, bias +1,748 MW at the 09:00 cutoff, whole month).
+- Logging: the backend logs one line per request through its own middleware, next to uvicorn's access log.
+

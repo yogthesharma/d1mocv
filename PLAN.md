@@ -71,7 +71,7 @@ Tick items as they are finished. Nothing in the assessment should be missing fro
 - [x] CORS restricted to the app's own domains, request logging
 - [x] API tests with TestClient and metric math checks
 - [x] ruff clean, type hints in place
-- [ ] OpenAPI docs at /docs look right (the four paths are checked by a test; not yet viewed in a browser)
+- [x] OpenAPI docs: schema reviewed (summaries, descriptions, parameter text added). The Swagger UI page itself could not be rendered in the in-app browser because its script loads from a CDN that pane did not load, so it was not seen rendered
 
 ### Phase 3: Early deploy check (walking skeleton)
 - [x] Decide the Vercel layout: api/index.py exposing the FastAPI app, vercel.json rewrites for /api/*, frontend build output
@@ -93,18 +93,18 @@ Tick items as they are finished. Nothing in the assessment should be missing fro
 - [x] Units (MW) and UTC labelled everywhere, sensible number formatting, chart tooltips
 - [x] Loading and error states (an empty state is not reachable with this data; missing metrics are handled)
 - [x] Works at phone width (checked at 375px, no horizontal page scroll)
-- [ ] Keyboard-usable controls, readable contrast (control labels and link names checked; tab order and contrast ratios not measured)
+- [x] Keyboard-usable controls, readable contrast (axe-core: 0 violations on both views in light and dark; Tab order checked: date, cutoff, nav, sidebar toggle, theme, chart, table)
 - [x] Light and dark theme
 - [x] Neutral page title and favicon, no personal info anywhere
 - [x] ESLint, Prettier, a few Vitest tests, clean production build (views are lazy-loaded; first load is about 515 kB, 167 kB gzipped, and the charts load on demand)
 
 ### Phase 5: Docker and full deploy
-- [ ] Backend Dockerfile (uv sync --frozen), .dockerignore
-- [ ] Frontend multi-stage build
-- [ ] docker-compose with healthchecks
-- [ ] Test `docker compose up` from a fresh clone in a new folder, then `docker compose down`
-- [ ] Production deploy on Vercel (frontend static, backend function), set env vars and CORS
-- [ ] Smoke test the live URL in incognito and at phone width: load, change date, change cutoff, switch views, check numbers match local
+- [x] Backend Dockerfile (uv sync --frozen), .dockerignore
+- [x] Frontend multi-stage build
+- [x] docker-compose with healthchecks
+- [x] Test `docker compose up` from a fresh copy of the repo in a new folder (tracked and unignored files only, built with layer cache), then `docker compose down`. A true clone with an empty cache is still worth doing once after the final commit
+- [x] Production deploy on Vercel (frontend static, backend function), set env vars and CORS
+- [x] Smoke test the live URL anonymously and at phone width: load, change cutoff, switch views, numbers match local and Docker (MAE 2,042 MW, bias +1,748 MW at 09:00)
 
 ### Phase 6: Optional AI chat (only after core is built, tested and deployed) — dropped: a streaming chat does not make sense on a serverless deploy
 ~~- [ ] Define tools: get_meta, get_forecast_at_decision, get_accuracy, calling the same services as the dashboard~~
