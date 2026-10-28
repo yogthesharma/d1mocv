@@ -21,6 +21,7 @@ Tick items as they are finished. Nothing in the assessment should be missing fro
 - [x] Replaced the sidebar with a sticky header: breadcrumbs with a view dropdown, date and cutoff filters, theme toggle
 - [x] Content polish: restored the section gap in the main column, moved KPI hints and section explanations under info tooltips, and themed the scrollbars (thumb only, no track)
 - [x] Video plan agreed and demo dates picked from the data: typical 5 Jan (MAE 2,093 MW, bias +1,835 MW), calm 18 Jan (743 MW, bias −730 MW), worst miss 27 Jan (5,375 MW, bias +5,375 MW)
+- [x] Part 1 slides deck created (`video/part1-slides.pptx`, narration in the speaker notes; source in `video/part1-slides.md`)
 - [x] Stability: fixed the columns-menu crash (Base UI menu group context) and the lost-anchor-ref warnings on React 18 by making Button forwardRef; added an error boundary around the views so render errors show the standard alert instead of a blank page
 
 ## Assessment traceability
