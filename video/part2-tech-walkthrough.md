@@ -38,7 +38,7 @@ Notes: the deployed app never calls Elexon; two tiny parquet files are shipped. 
 | `backend/app/services/metrics.py` | Error = forecast − actual (positive = forecast too high). MAE, RMSE, bias, P90/P95 (quantiles), and metrics split by horizon bucket. MAPE skipped. |
 | `backend/app/routers/api.py` | Four endpoints (`/api/health`, `/api/meta`, `/api/forecast-at-decision`, `/api/accuracy`), schema validation, uniform JSON error envelope. OpenAPI at `/docs`. |
 | `frontend/src/components/shared/slots-table.tsx` | Maps Req 1 (the forecast-at-decision set) and Req 2 (the error table) to the UI. Uses generated API types and URL-synced filters/state; empty states shown for dropped slots. |
-| `vercel.json` + `.github/workflows/ci.yml` | `vercel.json` routes `/api/*` to the serverless FastAPI app; CI runs backend tests (`pytest`) and frontend typecheck/lint/build on every push. |
+| `vercel.json` + `.github/workflows/ci.yml` | `vercel.json` routes `/api/*` to the serverless FastAPI app; CI runs ruff and `pytest` for the backend, then lint, format check, `vitest` and the build (which includes the TypeScript check) for the frontend; it also fails if the generated API types or `requirements.txt` are stale, and builds the Docker images. |
 
 ## Practices (close in 20s)
 - **Reproducible env**: `uv` lockfiles for backend; Vite + Node for frontend; Dockerfiles for both paths.
