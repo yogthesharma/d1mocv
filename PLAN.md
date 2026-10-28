@@ -10,7 +10,7 @@ Tick items as they are finished. Nothing in the assessment should be missing fro
 - [x] Wrote Decisions.md (cutoff, scope, error sign, metrics, data handling, deployment, repo naming)
 - [x] Wrote Tech.md (frontend, backend, data, tests, project-wide tooling, repo layout)
 - [x] Chose stack: Vite + React + TS, Tailwind, shadcn/ui, shadcn charts, TanStack Query; FastAPI, pandas, pyarrow, uv
-- [x] Chose UI layout: shadcn Sidebar (controls on top, nav for Decision, Accuracy, ~~Assistant~~)
+- [x] Chose UI layout: ~~shadcn Sidebar (controls on top, nav for Decision, Accuracy, ~~Assistant~~)~~, later replaced by the sticky header with breadcrumbs and filters (decision 16)
 - [x] Trimmed API to what the assessment asks: health, meta, forecast-at-decision, accuracy
 - [x] Decided on no authentication (public data, evaluators need open access)
 - [x] ~~Decided on AI chat as optional, gated, built only after core is deployed~~
@@ -20,6 +20,7 @@ Tick items as they are finished. Nothing in the assessment should be missing fro
 - [x] Section layout pass: section titles and descriptions sit outside the cards, content inside; the half-hours table was rebuilt on shadcn Table with sorting, text and presence filters, and column visibility
 - [x] Replaced the sidebar with a sticky header: breadcrumbs with a view dropdown, date and cutoff filters, theme toggle
 - [x] Content polish: restored the section gap in the main column, moved KPI hints and section explanations under info tooltips, and themed the scrollbars (thumb only, no track)
+- [x] Video plan agreed and demo dates picked from the data: typical 5 Jan (MAE 2,093 MW, bias +1,835 MW), calm 18 Jan (743 MW, bias −730 MW), worst miss 27 Jan (5,375 MW, bias +5,375 MW)
 - [x] Stability: fixed the columns-menu crash (Base UI menu group context) and the lost-anchor-ref warnings on React 18 by making Button forwardRef; added an error boundary around the views so render errors show the standard alert instead of a blank page
 
 ## Assessment traceability
@@ -139,8 +140,22 @@ Tick items as they are finished. Nothing in the assessment should be missing fro
 - [x] Remove TODOs, debug logging and dead code (none found in backend, frontend, scripts or api)
 
 ### Phase 8: Video
-- [ ] Pick the demo dates from the data (a typical day, a calm day, a big-miss day) and note the key numbers
-- [ ] Write a short script for each part
+
+#### Video plan (materials in `video/`)
+
+Part 1 (≤5 min, customer pitch): 3 slides then a live demo.
+1. Slide: the problem — buy power day-ahead, wind is uncertain, decide D-1 before gate closure (09:20 EPEX / 09:50 N2EX UK time).
+2. Slide: the two questions — latest forecast available at decision; how wrong, in MW.
+3. Slide: January headline numbers — MAE 2,042 MW, bias +1,748 MW (runs high), P95 5,310 MW buffer.
+4. Live demo (~3 min): Decision view with the typical day (5 Jan, MAE 2,093), then Accuracy view takeaway, then move the cutoff selector so numbers change.
+5. Slide: recommendations — buffer ≈ 5.3 GW, watch the bias, then next steps (live ingest, out-of-sample validation).
+
+Part 2 (≤5 min, tech lead): one mermaid diagram (reuse the README flowchart), then a tour of the files that carry the story in request order: `scripts/fetch_data.py` → `backend/app/services/selection.py` → `backend/tests/test_selection.py` (the crux: cutoff fixtures and the plain-Python cross-check) → `backend/app/services/metrics.py` → `backend/app/routers/api.py` → `frontend/src/components/shared/slots-table.tsx` → `vercel.json` + `ci.yml`, closing with practices (uv lockfile, ruff, CI, error envelope, error boundary) and trade-offs (static snapshot, in-sample band, bias uncorrected, AI chat dropped).
+
+Recording hygiene: clean profile, notifications off, neutral terminal, rehearse to ~4:30 per part, upload unlisted, verify in incognito.
+
+- [x] Pick the demo dates from the data (a typical day, a calm day, a big-miss day) and note the key numbers: typical 5 Jan (MAE 2,093 MW, bias +1,835 MW), calm 18 Jan (743 MW, bias −730 MW), worst miss 27 Jan (5,375 MW, bias +5,375 MW); whole month at the 09:00 cutoff: MAE 2,042 MW, bias +1,748 MW, P95 5,310 MW
+- [x] Write a short script for each part
 - [ ] Part 1 (max 5 min): customer pitch, the two questions answered, the demo, the buffer takeaway
 - [ ] Part 2 (max 5 min): architecture, data pipeline, cutoff logic and tests, code tour, dev practices, trade-offs, next steps
 - [ ] Recording hygiene: incognito or clean browser profile, no bookmarks or personal tabs, notifications off, terminal prompt and paths neutral, check audio
